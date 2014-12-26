@@ -1,0 +1,60 @@
+﻿<Window x:Class="mesheditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vectors="clr-namespace:mesheditor.Metro.Vectors"
+        xmlns:mesh="clr-namespace:mesheditor.Mesh"
+        Title="Mesh Edit" Height="700" Width="1200" WindowStartupLocation="CenterScreen">
+    <Border x:Name="borderFrame" BorderBrush="{DynamicResource ApplicationAccentBrush}" BorderThickness="1,1,1,23" VerticalAlignment="Stretch">
+        <Grid>
+            <Grid x:Name="containerFrame">
+                <Grid x:Name="homeHeader" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="60">
+                    <TextBlock x:Name="lblIcon" Text="Mesh" Foreground="{DynamicResource ApplicationAccentBrush}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="28" Margin="10,0,0,0" FontFamily="Script MT Bold"/>
+                    <!--<TextBlock x:Name="lblTitle" Text="Mesh Edit" Foreground="{DynamicResource TextBrushSecondary}" VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="15" Margin="181,28,275,14" TextTrimming="CharacterEllipsis"/>-->
+
+                    <Thumb x:Name="headerThumb" Opacity="0" Background="{x:Null}" Foreground="{x:Null}" Height="52" VerticalAlignment="Top"/>
+
+                    <StackPanel x:Name="homeHeaderActionButtons" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Height="26" Margin="0,0,0,0">
+                        <Button x:Name="btnActionSupport" ToolTip="Support" Width="34" Height="26" Margin="0" Style="{StaticResource WindowActionButton}" Visibility="Collapsed" VerticalAlignment="Top">
+                            <TextBlock Text="?" FontSize="14" />
+                        </Button>
+                        <Button x:Name="btnActionMinimize" ToolTip="Minimize" Width="34" Height="26" Margin="0" Style="{StaticResource WindowActionButton}" VerticalAlignment="Top">
+                            <vectors:MinimizeModule Width="34" Height="26"/>
+                        </Button>
+                        <Button x:Name="btnActionRestore" ToolTip="Restore" Width="34" Height="26" Margin="0" Style="{StaticResource WindowActionButton}" Visibility="Collapsed">
+                            <vectors:RestoreModule Width="34" Height="26"/>
+                        </Button>
+                        <Button x:Name="btnActionMaxamize" ToolTip="Maxamize" Width="34" Height="26" Margin="0" Style="{StaticResource WindowActionButton}">
+                            <vectors:MaxamizeModule Width="34" Height="26"/>
+                        </Button>
+                        <Button x:Name="btnActionClose" ToolTip="Close" Width="34" Height="26" Margin="0" Style="{StaticResource WindowActionButton}">
+                            <vectors:CloseModule Width="34" Height="26"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                <Grid x:Name="homeContent" Margin="0,52.75,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" x:Name="tabContent">
+                        <TabControl x:Name="homeTabControl" Background="{x:Null}" Margin="0,0,0,0" BorderBrush="{DynamicResource ApplicationAccentBrush}" Foreground="White" BorderThickness="0,2,0,0" Padding="2" SelectedIndex="1">
+                            <!--<TabItem Header="Home">
+                                <TabItem.Content>
+                                    <home:HomePage x:Name="homePage"/>
+                                </TabItem.Content>
+                            </TabItem>-->
+                            <TabItem Header="Mesh Editor">
+                                <TabItem.Content>
+                                    <mesh:MeshPage x:Name="meshPage"/>
+                                </TabItem.Content>
+                            </TabItem>
+                        </TabControl>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <TextBlock x:Name="lblStatus"  Margin="5,0,0,-19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Text="" Foreground="{DynamicResource TextBrushPrimary}"/>
+
+        </Grid>
+    </Border>
+</Window>

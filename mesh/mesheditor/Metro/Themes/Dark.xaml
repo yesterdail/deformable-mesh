@@ -1,0 +1,60 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="TextBrushPrimary" x:Name="TextBrushPrimary" Color="White"/>
+    <SolidColorBrush x:Key="TextBrushSecondary" x:Name="TextBrushSecondary" Color="#FF989898"/>
+
+    <SolidColorBrush x:Key="VectorBrush" x:Name="VectorBrush" Color="#FFF4F4F5"/>
+    <SolidColorBrush x:Key="WindowActionHoverBrush" x:Name="WindowActionHoverBrush" Color="#FF3f3f41"/>
+
+    <SolidColorBrush x:Key="HomeOpacityBrush" x:Name="HomeOpacityBrush" Color="#FF212121"/>
+    <SolidColorBrush x:Key="HomeIWffBrush" x:Name="HomeIWffBrush" Color="#99303030"/>
+
+    <SolidColorBrush x:Key="SidebarBlockBrush" x:Name="SidebarBlockBrush" Color="#FF3f3f46"/>
+    <SolidColorBrush x:Key="SidebarBackgroundBrush" x:Name="SidebarBackgroundBrush" Color="#FF252526"/>
+    <SolidColorBrush x:Key="SidebarHeaderBrush" x:Name="SidebarHeaderBrush" Color="#FF2d2d30"/>
+    <SolidColorBrush x:Key="SidebarHeaderSeperatorBrush" x:Name="SidebarHeaderSeperatorBrush" Color="#FF46464a"/>
+
+    <SolidColorBrush x:Key="MainBackgroundBrush" x:Name="MainBackgroundBrush" Color="#FF2d2d30"/>
+
+    <SolidColorBrush x:Key="DisabledVisualElement" Color="#FF181818" Opacity="0.6" />
+
+    <!--Background-->
+    <SolidColorBrush x:Key="Background" Color="#1C1C1C"/>
+    <SolidColorBrush x:Key="LightBackground" Color="#002D2D30"/>
+
+    <!--Foreground-->
+    <SolidColorBrush x:Key="Foreground" Color="#FFFFFF"/>
+
+    <!--General-->
+    <SolidColorBrush x:Key="BackgroundHighlighted" Color="#54545C"/>
+    <SolidColorBrush x:Key="BorderBrushHighlighted" Color="#6A6A75"/>
+    <SolidColorBrush x:Key="BackgroundSelected" Color="#007ACC"/>
+    <SolidColorBrush x:Key="BorderBrushSelected" Color="#1C97EA"/>
+    <SolidColorBrush x:Key="BackgroundNormal" Color="#3F3F46"/>
+    <SolidColorBrush x:Key="BorderBrushNormal" Color="#54545C"/>
+
+    <!--Text Box-->
+    <SolidColorBrush x:Key="TextBoxBackground" Color="#333337"/>
+    <SolidColorBrush x:Key="TextBoxBackgroundSelected" Color="#3F3F46"/>
+
+    <!--Search Text Box-->
+    <SolidColorBrush x:Key="SearchTextForeground" Color="#999999"/>
+
+    <!--Close Button-->
+    <SolidColorBrush x:Key="CloseButtonBackgroundHighlighted" Color="#39ADFB"/>
+    <SolidColorBrush x:Key="CloseButtonBackgroundPressed" Color="#084E7D"/>
+    <SolidColorBrush x:Key="CloseButtonStroke" Color="#AAFFFFFF"/>
+    <SolidColorBrush x:Key="CloseButtonStrokeHighlighted" Color="#FFFFFF"/>
+
+    <!--Menu-->
+    <SolidColorBrush x:Key="MenuSeparatorBorderBrush" Color="#333337"/>
+    <SolidColorBrush x:Key="MenuItemHighlightedBackground" Color="#3E3E40"/>
+    <SolidColorBrush x:Key="SubmenuItemBackground" Color="#1B1B1C"/>
+    <SolidColorBrush x:Key="SubmenuItemBackgroundHighlighted" Color="#333334"/>
+    <SolidColorBrush x:Key="MenuDisabledForeground" Color="#656565"/>
+
+    <!--Scroll Bar-->
+    <SolidColorBrush x:Key="ScrollBarPageButtonBackgroundHighlighted" Color="#05FFFFFF"/>
+    
+</ResourceDictionary>

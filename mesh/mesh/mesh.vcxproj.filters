@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="common\FileInfo.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\GLFramebuffer.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\GLOffScreenRender.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\GLShader.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\GLTexture.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\GLUtility.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\Image.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\ImageBase.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\ImageBmp.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\ImageIO.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\ImageJpeg.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\Pixel.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\TrackBall.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="core\MeshRenderer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Manager.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{7215f8f6-d150-4abf-baf5-b2047e5e654a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{23ef4a75-4718-4617-bb03-5dce2d967f6f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\config.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\FileInfo.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\GLFramebuffer.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\glmext.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\GLOffScreenRender.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\GLShader.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\GLTexture.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\GLUtility.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\Image.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\ImageBase.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\ImageBmp.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\ImageIO.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\ImageJpeg.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\IOUtilities.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\macro.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\meshext.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\Pixel.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\TrackBall.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="core\MeshRenderer.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Manager.h">
+      <Filter>core</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

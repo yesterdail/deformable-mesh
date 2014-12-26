@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mesh", "mesh\mesh.vcxproj", "{3977D2CF-4DAA-4584-9C2D-59CA8A772427}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "meshclr", "meshclr\meshclr.vcxproj", "{D72663E8-7EC3-4239-AD70-3FBE74268114}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3977D2CF-4DAA-4584-9C2D-59CA8A772427} = {3977D2CF-4DAA-4584-9C2D-59CA8A772427}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mesheditor", "mesheditor\mesheditor.csproj", "{4CA75A56-080C-43E6-B68B-63401724782A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D72663E8-7EC3-4239-AD70-3FBE74268114} = {D72663E8-7EC3-4239-AD70-3FBE74268114}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3977D2CF-4DAA-4584-9C2D-59CA8A772427}.Debug|x64.ActiveCfg = Debug|x64
+		{3977D2CF-4DAA-4584-9C2D-59CA8A772427}.Debug|x64.Build.0 = Debug|x64
+		{3977D2CF-4DAA-4584-9C2D-59CA8A772427}.Release|x64.ActiveCfg = Release|x64
+		{3977D2CF-4DAA-4584-9C2D-59CA8A772427}.Release|x64.Build.0 = Release|x64
+		{D72663E8-7EC3-4239-AD70-3FBE74268114}.Debug|x64.ActiveCfg = Debug|x64
+		{D72663E8-7EC3-4239-AD70-3FBE74268114}.Debug|x64.Build.0 = Debug|x64
+		{D72663E8-7EC3-4239-AD70-3FBE74268114}.Release|x64.ActiveCfg = Release|x64
+		{D72663E8-7EC3-4239-AD70-3FBE74268114}.Release|x64.Build.0 = Release|x64
+		{4CA75A56-080C-43E6-B68B-63401724782A}.Debug|x64.ActiveCfg = Debug|x64
+		{4CA75A56-080C-43E6-B68B-63401724782A}.Debug|x64.Build.0 = Debug|x64
+		{4CA75A56-080C-43E6-B68B-63401724782A}.Release|x64.ActiveCfg = Release|x64
+		{4CA75A56-080C-43E6-B68B-63401724782A}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

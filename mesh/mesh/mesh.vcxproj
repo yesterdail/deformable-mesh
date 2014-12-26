@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3977D2CF-4DAA-4584-9C2D-59CA8A772427}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>mesh</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\build\bin_debug\</OutDir>
+    <IntDir>..\build\intermediate_debug\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\build\bin_release\</OutDir>
+    <IntDir>..\build\intermediate_release\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\3rdparty\include;.\</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\3rdparty\lib_debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32d.lib;OpenMeshCored.lib;libjpegd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>..\build\lib_debug\$(TargetName).lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\3rdparty\include;.\</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\3rdparty\lib_release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;OpenMeshCore.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>..\build\lib_release\$(TargetName).lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="common\FileInfo.cpp" />
+    <ClCompile Include="common\GLFramebuffer.cpp" />
+    <ClCompile Include="common\GLOffScreenRender.cpp" />
+    <ClCompile Include="common\GLShader.cpp" />
+    <ClCompile Include="common\GLTexture.cpp" />
+    <ClCompile Include="common\GLUtility.cpp" />
+    <ClCompile Include="common\Image.cpp" />
+    <ClCompile Include="common\ImageBase.cpp" />
+    <ClCompile Include="common\ImageBmp.cpp" />
+    <ClCompile Include="common\ImageIO.cpp" />
+    <ClCompile Include="common\ImageJpeg.cpp" />
+    <ClCompile Include="common\Pixel.cpp" />
+    <ClCompile Include="common\TrackBall.cpp" />
+    <ClCompile Include="core\Manager.cpp" />
+    <ClCompile Include="core\MeshRenderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\config.h" />
+    <ClInclude Include="common\FileInfo.h" />
+    <ClInclude Include="common\GLFramebuffer.h" />
+    <ClInclude Include="common\glmext.h" />
+    <ClInclude Include="common\GLOffScreenRender.h" />
+    <ClInclude Include="common\GLShader.h" />
+    <ClInclude Include="common\GLTexture.h" />
+    <ClInclude Include="common\GLUtility.h" />
+    <ClInclude Include="common\Image.h" />
+    <ClInclude Include="common\ImageBase.h" />
+    <ClInclude Include="common\ImageBmp.h" />
+    <ClInclude Include="common\ImageIO.h" />
+    <ClInclude Include="common\ImageJpeg.h" />
+    <ClInclude Include="common\IOUtilities.h" />
+    <ClInclude Include="common\macro.h" />
+    <ClInclude Include="common\meshext.h" />
+    <ClInclude Include="common\Pixel.h" />
+    <ClInclude Include="common\TrackBall.h" />
+    <ClInclude Include="core\Manager.h" />
+    <ClInclude Include="core\MeshRenderer.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
