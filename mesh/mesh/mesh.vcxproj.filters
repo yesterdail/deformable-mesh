@@ -31,9 +31,6 @@
     <ClCompile Include="common\ImageIO.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="common\ImageJpeg.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="common\Pixel.cpp">
       <Filter>common</Filter>
     </ClCompile>
@@ -90,9 +87,6 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="common\ImageIO.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="common\ImageJpeg.h">
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="common\IOUtilities.h">

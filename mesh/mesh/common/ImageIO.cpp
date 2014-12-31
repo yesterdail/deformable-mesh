@@ -1,7 +1,6 @@
 #include "ImageIO.h"
 #include "IOUtilities.h"
 #include "ImageBmp.h"
-#include "ImageJpeg.h"
 
 namespace hj
 {
@@ -10,12 +9,11 @@ namespace hj
     ImageIOInitializer()
     {
       array_.push_back(new BmpImageIOImplement);
-      array_.push_back(new JpegImageIOImplement);
     }
 
     ~ImageIOInitializer()
     {
-      for(int i = 0; i < array_.size(); ++i) {
+      for(size_t i = 0; i < array_.size(); ++i) {
         if(array_[i]) {
           delete array_[i];
           array_[i] = NULL;
@@ -31,7 +29,7 @@ namespace hj
 
   BaseImageIOImplement* ImageIO::FindIO(const std::string &extension)
   {
-    for(int i = 0; i < image_ios.array_.size(); ++i)
+    for (size_t i = 0; i < image_ios.array_.size(); ++i)
     {
       if(image_ios.array_[i]->IsSupported(extension))
         return image_ios.array_[i]->NewIO();
