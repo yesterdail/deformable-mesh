@@ -59,6 +59,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\3rdparty\include;.\</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>4512;4127;4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -80,6 +81,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>..\3rdparty\include;.\</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>4512;4127;4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,6 +106,7 @@
     <ClCompile Include="common\ImageIO.cpp" />
     <ClCompile Include="common\Pixel.cpp" />
     <ClCompile Include="common\TrackBall.cpp" />
+    <ClCompile Include="common\TriMesh.cpp" />
     <ClCompile Include="core\Manager.cpp" />
     <ClCompile Include="core\MeshRenderer.cpp" />
   </ItemGroup>
@@ -125,6 +128,7 @@
     <ClInclude Include="common\meshext.h" />
     <ClInclude Include="common\Pixel.h" />
     <ClInclude Include="common\TrackBall.h" />
+    <ClInclude Include="common\TriMesh.h" />
     <ClInclude Include="core\Manager.h" />
     <ClInclude Include="core\MeshRenderer.h" />
   </ItemGroup>

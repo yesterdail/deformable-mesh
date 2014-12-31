@@ -50,6 +50,55 @@ namespace hj
     */
     bool Resize(int new_width, int new_height);
 
+    /**
+    * Loads a mesh.
+    * @param file_paths: path of mesh.
+    * @return: True if all parameters are valid, false otherwise.
+    */
+    bool LoadMesh(String^ filename);
+
+    /**
+    * Resets positions/directions of the camera.
+    * @return: True if successful, false otherwise.
+    */
+    bool ResetCamera();
+
+    /**
+    * Rotates VR.
+    * @param newMouseX: current mouse position X in view coordinate.
+    * @param newMouseY: current mouse position Y in view coordinate.
+    * @param lastMouseX: last mouse position X in view coordinate.
+    * @param lastMouseY: last mouse position Y in view coordinate.
+    */
+    void Rotate(float newMouseX,
+      float newMouseY,
+      float lastMouseX,
+      float lastMouseY);
+
+    /**
+    * Zoom VR.
+    * @param newMouseX: current mouse position X in view coordinate.
+    * @param newMouseY: current mouse position Y in view coordinate.
+    * @param lastMouseX: last mouse position X in view coordinate.
+    * @param lastMouseY: last mouse position Y in view coordinate.
+    */
+    void Zoom(float newMouseX,
+      float newMouseY,
+      float lastMouseX,
+      float lastMouseY);
+
+    /**
+    * Move VR.
+    * @param newMouseX: current mouse position X in view coordinate.
+    * @param newMouseY: current mouse position Y in view coordinate.
+    * @param lastMouseX: last mouse position X in view coordinate.
+    * @param lastMouseY: last mouse position Y in view coordinate.
+    */
+    void Move(float newMouseX,
+      float newMouseY,
+      float lastMouseX,
+      float lastMouseY);
+
   private:
     /** Pointer to a VisualizationManager on the native heap. */
     Manager* mgr_ptr_;

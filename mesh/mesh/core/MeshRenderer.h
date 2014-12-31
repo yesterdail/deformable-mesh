@@ -3,6 +3,7 @@
 
 #include "common/macro.h"
 #include "common/glmext.h"
+#include "common/TriMesh.h"
 
 namespace hj
 {
@@ -46,6 +47,55 @@ namespace hj
     */
     bool ResizeOutput(const glm::ivec2 &new_size);
 
+    /**
+    * Loads a mesh.
+    * @param file_paths: path of mesh.
+    * @return: True if all parameters are valid, false otherwise.
+    */
+    bool LoadMesh(const std::string& filename);
+
+    /**
+    * Resets positions/directions of the camera.
+    * @return: True if successful, false otherwise.
+    */
+    bool ResetCamera();
+
+    /**
+    * Rotates VR.
+    * @param newMouseX: current mouse position X in view coordinate.
+    * @param newMouseY: current mouse position Y in view coordinate.
+    * @param lastMouseX: last mouse position X in view coordinate.
+    * @param lastMouseY: last mouse position Y in view coordinate.
+    */
+    void Rotate(float newMouseX,
+      float newMouseY,
+      float lastMouseX,
+      float lastMouseY);
+
+    /**
+    * Zoom VR.
+    * @param newMouseX: current mouse position X in view coordinate.
+    * @param newMouseY: current mouse position Y in view coordinate.
+    * @param lastMouseX: last mouse position X in view coordinate.
+    * @param lastMouseY: last mouse position Y in view coordinate.
+    */
+    void Zoom(float newMouseX,
+      float newMouseY,
+      float lastMouseX,
+      float lastMouseY);
+
+    /**
+    * Move VR.
+    * @param newMouseX: current mouse position X in view coordinate.
+    * @param newMouseY: current mouse position Y in view coordinate.
+    * @param lastMouseX: last mouse position X in view coordinate.
+    * @param lastMouseY: last mouse position Y in view coordinate.
+    */
+    void Move(float newMouseX,
+      float newMouseY,
+      float lastMouseX,
+      float lastMouseY);
+
   private:
 
     /**
@@ -53,8 +103,38 @@ namespace hj
     */
     bool Run();
 
+    /**
+    * draw the loaded mesh.
+    */
+    void drawMainObject(float r, float g, float b);
+
   private:
+    /** Output frame buffer. */
     GLFramebuffer* out_fbo_ptr_;
+
+    /** input mesh. */
+    TriMesh* mesh_;
+
+    /** mesh center in world coordinate. */
+    Point center_;
+
+    /** mesh radius in world coordinate. */
+    float radius_;
+
+    /** All vertices for drawing. */
+    std::vector<unsigned int> triverts_;
+
+    /** ROI vertices for drawing. */
+    std::vector<unsigned int> roiverts_;
+
+    /** model view transform matrix. */
+    glm::mat4 modelview_;
+
+    /** projection transform matrix. */
+    glm::mat4 projection_;
+
+    /** fov y in degree. */
+    const float fovy_;
   };
 }
 #endif // HJ_MeshRenderer_h__

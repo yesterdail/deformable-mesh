@@ -44,6 +44,55 @@ namespace hj
     */
     HJ_EXPORT bool Resize(int new_width, int new_height);
 
+    /**
+    * Loads a mesh.
+    * @param file_paths: path of mesh.
+    * @return: True if all parameters are valid, false otherwise.
+    */
+    HJ_EXPORT bool LoadMesh(const std::string& filename);
+
+    /**
+    * Resets positions/directions of the camera.
+    * @return: True if successful, false otherwise.
+    */
+    HJ_EXPORT bool ResetCamera();
+
+    /**
+    * Rotates VR.
+    * @param newMouseX: current mouse position X in view coordinate.
+    * @param newMouseY: current mouse position Y in view coordinate.
+    * @param lastMouseX: last mouse position X in view coordinate.
+    * @param lastMouseY: last mouse position Y in view coordinate.
+    */
+    HJ_EXPORT void Rotate(float newMouseX,
+      float newMouseY,
+      float lastMouseX,
+      float lastMouseY);
+
+    /**
+    * Zoom VR.
+    * @param newMouseX: current mouse position X in view coordinate.
+    * @param newMouseY: current mouse position Y in view coordinate.
+    * @param lastMouseX: last mouse position X in view coordinate.
+    * @param lastMouseY: last mouse position Y in view coordinate.
+    */
+    HJ_EXPORT void Zoom(float newMouseX,
+      float newMouseY,
+      float lastMouseX,
+      float lastMouseY);
+
+    /**
+    * Move VR.
+    * @param newMouseX: current mouse position X in view coordinate.
+    * @param newMouseY: current mouse position Y in view coordinate.
+    * @param lastMouseX: last mouse position X in view coordinate.
+    * @param lastMouseY: last mouse position Y in view coordinate.
+    */
+    HJ_EXPORT void Move(float newMouseX,
+      float newMouseY,
+      float lastMouseX,
+      float lastMouseY);
+
   private:
     GLOffScreenRender* offscreen_render_ptr_;
 

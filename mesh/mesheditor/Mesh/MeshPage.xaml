@@ -14,7 +14,7 @@
         <DockPanel Grid.Column="0"  x:Name="sideBar" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource LightBackground}">
             <StackPanel DockPanel.Dock="Top" Grid.Column="1" Margin="50,25,50,0">
                 <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-                    <Button x:Name="btnImport" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Open Mesh">
+                    <Button x:Name="btnImportMesh" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Open Mesh">
                         <Image Source="Images/open.png" Width="40" Height="40"/>
                     </Button>
                 </StackPanel>

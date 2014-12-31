@@ -33,4 +33,46 @@ namespace hj
     return renderer_ptr_->ResizeOutput(glm::ivec2(new_width, new_height));
   }
 
+  bool Manager::LoadMesh(const std::string& filename)
+  {
+    return renderer_ptr_->LoadMesh(filename);
+  }
+
+  bool Manager::ResetCamera()
+  {
+    return renderer_ptr_->ResetCamera();
+  }
+
+  void Manager::Rotate(float newMouseX,
+    float newMouseY,
+    float lastMouseX,
+    float lastMouseY)
+  {
+    renderer_ptr_->Rotate(newMouseX,
+      newMouseY,
+      lastMouseX,
+      lastMouseY);
+  }
+
+  void Manager::Zoom(float newMouseX,
+    float newMouseY,
+    float lastMouseX,
+    float lastMouseY)
+  {
+    renderer_ptr_->Zoom(newMouseX,
+      newMouseY,
+      lastMouseX,
+      lastMouseY);
+  }
+
+  void Manager::Move(float newMouseX,
+    float newMouseY,
+    float lastMouseX,
+    float lastMouseY)
+  {
+    renderer_ptr_->Move(newMouseX,
+      newMouseY,
+      lastMouseX,
+      lastMouseY);
+  }
 }

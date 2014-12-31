@@ -43,6 +43,9 @@
     <ClCompile Include="core\Manager.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="common\TriMesh.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -109,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="core\Manager.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="common\TriMesh.h">
+      <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

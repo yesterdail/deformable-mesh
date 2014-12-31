@@ -11,6 +11,13 @@ namespace mesheditor.Mesh
   /// </summary>
   public partial class MeshPage : IPage
   {
+    #region Class Members
+
+    bool mouseDown = false;
+    Point oldMouse;
+
+    #endregion
+
     #region Constructors
 
     public MeshPage()
@@ -32,11 +39,57 @@ namespace mesheditor.Mesh
 
     #endregion
 
+    #region Mouse Event Handlers
+
+    private void image_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+      mouseDown = true;
+      oldMouse = e.GetPosition(image);
+    }
+
+    private void image_MouseMove(object sender, MouseEventArgs e)
+    {
+      if (!mouseDown) return;
+
+      if (e.LeftButton == MouseButtonState.Pressed)
+      {
+        Point point = e.GetPosition(image);
+        Globals.Manager.Rotate((float)point.X, (float)point.Y, (float)oldMouse.X, (float)oldMouse.Y);
+        UpdateImage();
+        oldMouse = point;
+      }
+      else if (e.RightButton == MouseButtonState.Pressed)
+      {
+        Point point = e.GetPosition(image);
+        Globals.Manager.Zoom((float)point.X, (float)point.Y, (float)oldMouse.X, (float)oldMouse.Y);
+        UpdateImage();
+        oldMouse = point;
+      }
+      else if (e.MiddleButton == MouseButtonState.Pressed)
+      {
+        Point point = e.GetPosition(image);
+        Globals.Manager.Move((float)point.X, (float)point.Y, (float)oldMouse.X, (float)oldMouse.Y);
+        UpdateImage();
+        oldMouse = point;
+      }
+    }
+
+    private void image_MouseUp(object sender, MouseButtonEventArgs e)
+    {
+      mouseDown = false;
+    }
+
+    #endregion
+
     #region Other Event Handlers
 
     private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
     {
+      int width = 0, height = 0;
+      GetRegion(ref width, ref height);
+
       Globals.Manager = new hj.ManagerCLR();
+      Globals.Manager.CreateView(width, height);
       Globals.Initialized = true;
       UserControl_SizeChanged(null, null);
     }
@@ -52,6 +105,15 @@ namespace mesheditor.Mesh
       }
     }
 
+    private void btnImportMesh_Click(object sender, RoutedEventArgs e)
+    {
+      string meshfile = @"E:\samples\cactus.off";
+      if (Globals.Manager.LoadMesh(meshfile))
+      {
+        UpdateImage();
+      }
+    }
+
     #endregion
 
     #region Private Functions
@@ -63,6 +125,11 @@ namespace mesheditor.Mesh
     {
       this.Loaded += new System.Windows.RoutedEventHandler(UserControl_Loaded);
       this.SizeChanged += new SizeChangedEventHandler(UserControl_SizeChanged);
+      btnImportMesh.Click += new RoutedEventHandler(btnImportMesh_Click);
+
+      image.MouseDown += new MouseButtonEventHandler(image_MouseDown);
+      image.MouseMove += new MouseEventHandler(image_MouseMove);
+      image.MouseUp += new MouseButtonEventHandler(image_MouseUp);
     }
 
     /// <summary>

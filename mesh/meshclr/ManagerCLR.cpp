@@ -35,4 +35,57 @@ namespace hj
   {
     return mgr_ptr_->Resize(new_width, new_height);
   }
+
+  bool ManagerCLR::LoadMesh(String^ filename)
+  {
+    std::string native_file_path;
+    char char_buffer[8192] = { 0 };
+    size_t converted = 0;
+    pin_ptr<const wchar_t> pinned_string = PtrToStringChars(filename);
+    wcstombs_s(&converted,
+      char_buffer,
+      sizeof(char_buffer),
+      pinned_string,
+      filename->Length);
+    native_file_path.assign(char_buffer);
+    return mgr_ptr_->LoadMesh(native_file_path);
+  }
+
+  bool ManagerCLR::ResetCamera()
+  {
+    return mgr_ptr_->ResetCamera();
+  }
+
+  void ManagerCLR::Rotate(float newMouseX,
+    float newMouseY,
+    float lastMouseX,
+    float lastMouseY)
+  {
+    mgr_ptr_->Rotate(newMouseX,
+      newMouseY,
+      lastMouseX,
+      lastMouseY);
+  }
+
+  void ManagerCLR::Zoom(float newMouseX,
+    float newMouseY,
+    float lastMouseX,
+    float lastMouseY)
+  {
+    mgr_ptr_->Zoom(newMouseX,
+      newMouseY,
+      lastMouseX,
+      lastMouseY);
+  }
+
+  void ManagerCLR::Move(float newMouseX,
+    float newMouseY,
+    float lastMouseX,
+    float lastMouseY)
+  {
+    mgr_ptr_->Move(newMouseX,
+      newMouseY,
+      lastMouseX,
+      lastMouseY);
+  }
 }
