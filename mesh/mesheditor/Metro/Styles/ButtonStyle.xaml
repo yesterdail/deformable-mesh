@@ -85,7 +85,7 @@
         <Setter Property="Visibility" Value="Visible"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
         <Setter Property="Background" Value="{x:Null}"/>
-        <Setter Property="BorderBrush" Value="{x:Null}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushNormal}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">

@@ -52,6 +52,13 @@ namespace hj
     HJ_EXPORT bool LoadMesh(const std::string& filename);
 
     /**
+    * Loads a texture.
+    * @param file_paths: path of mesh.
+    * @return: True if all parameters are valid, false otherwise.
+    */
+    HJ_EXPORT bool LoadTexture(const std::string& filename);
+
+    /**
     * Resets positions/directions of the camera.
     * @return: True if successful, false otherwise.
     */
@@ -92,6 +99,31 @@ namespace hj
       float newMouseY,
       float lastMouseX,
       float lastMouseY);
+
+    /**
+    * Set smooth rendering.
+    */
+    HJ_EXPORT void SetSmooth();
+
+    /**
+    * Set flat rendering.
+    */
+    HJ_EXPORT void SetFlat();
+
+    /**
+    * Set wire frame rendering.
+    */
+    HJ_EXPORT void SetWireframe(bool w);
+
+    /**
+    * Set solid rendering.
+    */
+    HJ_EXPORT void SetSolid(bool s);
+
+    /**
+    * Set rendering with texture.
+    */
+    HJ_EXPORT void SetTexture(bool t);
 
   private:
     GLOffScreenRender* offscreen_render_ptr_;

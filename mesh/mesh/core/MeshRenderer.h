@@ -55,6 +55,13 @@ namespace hj
     bool LoadMesh(const std::string& filename);
 
     /**
+    * Loads a texture.
+    * @param file_paths: path of mesh.
+    * @return: True if all parameters are valid, false otherwise.
+    */
+    bool LoadTexture(const std::string& filename);
+
+    /**
     * Resets positions/directions of the camera.
     * @return: True if successful, false otherwise.
     */
@@ -96,6 +103,31 @@ namespace hj
       float lastMouseX,
       float lastMouseY);
 
+    /**
+    * Set smooth rendering.
+    */
+    void SetSmooth();
+
+    /**
+    * Set flat rendering.
+    */
+    void SetFlat();
+
+    /**
+    * Set wire frame rendering.
+    */
+    void SetWireframe(bool w);
+
+    /**
+    * Set solid rendering.
+    */
+    void SetSolid(bool s);
+
+    /**
+    * Set rendering with texture.
+    */
+    void SetTexture(bool t);
+
   private:
 
     /**
@@ -135,6 +167,17 @@ namespace hj
 
     /** fov y in degree. */
     const float fovy_;
+
+    /** wire frame rendering. */
+    bool wireframe_;
+
+    /** solid rendering. */
+    bool solid_;
+
+    /** rendering with texture. */
+    bool texture_;
+
+    Image* texture_image_;
   };
 }
 #endif // HJ_MeshRenderer_h__

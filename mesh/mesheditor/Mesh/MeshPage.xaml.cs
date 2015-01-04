@@ -92,6 +92,14 @@ namespace mesheditor.Mesh
       Globals.Manager.CreateView(width, height);
       Globals.Initialized = true;
       UserControl_SizeChanged(null, null);
+
+      bool w = false, s = true, t = false;
+      Globals.Manager.SetWireframe(w);
+      Globals.Manager.SetSolid(s);
+      Globals.Manager.SetTexture(t);
+      btnWireframe.IsChecked = w;
+      btnSolid.IsChecked = s;
+      btnTexture.IsChecked = t;
     }
 
     private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -107,11 +115,63 @@ namespace mesheditor.Mesh
 
     private void btnImportMesh_Click(object sender, RoutedEventArgs e)
     {
-      string meshfile = @"E:\samples\cactus.off";
-      if (Globals.Manager.LoadMesh(meshfile))
+      Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+      dlg.InitialDirectory = @"c:\";
+      dlg.RestoreDirectory = true;
+      dlg.Title = "Open Mesh";
+      dlg.Filter = "OBJ Files (*.obj)|*.obj|PLY Files (*.ply)|*.ply|OFF Files (*.off)|*.off|STL Files (*.stl)|*.stl|All known formats(*.*)|*.*";
+      dlg.ShowDialog();
+      if (dlg.FileName.Length > 0)
       {
-        UpdateImage();
+        string meshfile = dlg.FileName;
+        //string meshfile = @"E:\samples\cactus.off";
+        if (Globals.Manager.LoadMesh(meshfile))
+        {
+          UpdateImage();
+        }
       }
+    }
+
+    private void btnImportTexture_Click(object sender, RoutedEventArgs e)
+    {
+      Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+      dlg.InitialDirectory = @"c:\";
+      dlg.RestoreDirectory = true;
+      dlg.Title = "Open texture file";
+      dlg.Filter = "BMP Files (*.bmp)|*.bmp|JPEG Files (*.jpg)|*.jpg|All known formats(*.*)|*.*";
+      dlg.ShowDialog();
+      if (dlg.FileName.Length > 0)
+      {
+        string texfile = dlg.FileName;
+        //string texfile = @"E:\samples\hj.bmp";
+        if (Globals.Manager.LoadTexture(texfile))
+        {
+          Globals.Manager.SetTexture(true);
+          btnTexture.IsChecked = true;
+          UpdateImage();
+        }
+      }
+    }
+
+    private void btnWireframe_Click(object sender, RoutedEventArgs e)
+    {
+      bool w = (btnWireframe.IsChecked == true);
+      Globals.Manager.SetWireframe(w);
+      UpdateImage();
+    }
+
+    private void btnSmooth_Click(object sender, RoutedEventArgs e)
+    {
+      bool s = (btnSolid.IsChecked == true);
+      Globals.Manager.SetSolid(s);
+      UpdateImage();
+    }
+
+    private void btnTexture_Click(object sender, RoutedEventArgs e)
+    {
+      bool t = (btnTexture.IsChecked == true);
+      Globals.Manager.SetTexture(t);
+      UpdateImage();
     }
 
     #endregion
@@ -126,6 +186,10 @@ namespace mesheditor.Mesh
       this.Loaded += new System.Windows.RoutedEventHandler(UserControl_Loaded);
       this.SizeChanged += new SizeChangedEventHandler(UserControl_SizeChanged);
       btnImportMesh.Click += new RoutedEventHandler(btnImportMesh_Click);
+      btnImportTexture.Click += new RoutedEventHandler(btnImportTexture_Click);
+      btnWireframe.Click += new RoutedEventHandler(btnWireframe_Click);
+      btnSolid.Click += new RoutedEventHandler(btnSmooth_Click);
+      btnTexture.Click += new RoutedEventHandler(btnTexture_Click);
 
       image.MouseDown += new MouseButtonEventHandler(image_MouseDown);
       image.MouseMove += new MouseEventHandler(image_MouseMove);

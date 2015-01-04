@@ -2,15 +2,21 @@
 #include "common/GLFramebuffer.h"
 #include "common/GLTexture.h"
 #include "common/Trackball.h"
+#include "common/ImageIO.h"
+#include "common/Image.h"
 
 namespace hj
 {
   MeshRenderer::MeshRenderer()
     : out_fbo_ptr_(NULL)
     , mesh_(NULL)
+    , texture_image_(NULL)
     , center_(Point(0, 0, 0))
     , radius_(1)
     , fovy_(45)
+    , wireframe_(true)
+    , solid_(true)
+    , texture_(false)
   {
   }
 
@@ -18,6 +24,7 @@ namespace hj
   {
     DEL_PTR(out_fbo_ptr_);
     DEL_PTR(mesh_);
+    DEL_PTR(texture_image_);
   }
 
   bool MeshRenderer::Initialize(const glm::ivec2& view_size)
@@ -88,14 +95,34 @@ namespace hj
       glEnableClientState(GL_NORMAL_ARRAY);
       glNormalPointer(GL_FLOAT, 0, mesh_->vertex_normals());
 
+      // texture
+      if (texture_ && texture_image_ && mesh_->has_vertex_texcoords2D())
+      {
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        glTexCoordPointer(2, GL_FLOAT, 0, mesh_->texcoords2D());
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, texture_image_->GetTexture()->GetId());
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+      }
+
       // draw solid mesh, with polygon offset
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
       glEnable(GL_POLYGON_OFFSET_FILL);
       glPolygonOffset(2.5f, 2.5f);
-      drawMainObject(0.8f, 1.0f, 1.0f);
+      if (solid_)
+      {
+        drawMainObject(0.8f, 1.0f, 1.0f);
+      }
+      if (wireframe_)
+      {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        drawMainObject(0.5f, 0.5f, 0.5f);
+      }
 
       glDisableClientState(GL_VERTEX_ARRAY);
       glDisableClientState(GL_NORMAL_ARRAY);
+      glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+      glDisable(GL_TEXTURE_2D);
     }
 
     return (GL_NO_ERROR == glGetError());
@@ -121,8 +148,8 @@ namespace hj
   bool MeshRenderer::LoadMesh(const std::string& filename)
   {
     DEL_PTR(mesh_);
-    mesh_ = TriMesh::read(filename.c_str());
-    if (!mesh_) {
+    mesh_ = new TriMesh();
+    if (!mesh_->read(filename.c_str())) {
       assert(0);
       return false;
     }
@@ -142,6 +169,24 @@ namespace hj
     }
 
     ResetCamera();
+
+    return true;
+  }
+
+  bool MeshRenderer::LoadTexture(const std::string& filename)
+  {
+    DEL_PTR(texture_image_);
+    texture_image_ = new Image();
+    if (!ImageIO::Read(filename, texture_image_)) {
+      DEL_PTR(texture_image_);
+      assert(0);
+      return false;
+    }
+    texture_image_->CreateTexture();
+    if (glm::any(glm::lessThanEqual(texture_image_->GetSize(), glm::ivec2(0)))) {
+      assert(0);
+      return false;
+    }
 
     return true;
   }
@@ -233,5 +278,30 @@ namespace hj
     glColor3f(r, g, b);
     if (triverts_.size()>0)
       glDrawElements(GL_TRIANGLES, (GLsizei)triverts_.size(), GL_UNSIGNED_INT, &(triverts_[0]));
+  }
+
+  void MeshRenderer::SetSmooth()
+  {
+    glShadeModel(GL_SMOOTH);
+  }
+
+  void MeshRenderer::SetFlat()
+  {
+    glShadeModel(GL_FLAT);
+  }
+
+  void MeshRenderer::SetWireframe(bool w)
+  {
+    wireframe_ = w;
+  }
+
+  void MeshRenderer::SetSolid(bool s)
+  {
+    solid_ = s;
+  }
+
+  void MeshRenderer::SetTexture(bool t)
+  {
+    texture_ = t;
   }
 }

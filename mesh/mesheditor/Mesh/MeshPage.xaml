@@ -15,10 +15,33 @@
             <StackPanel DockPanel.Dock="Top" Grid.Column="1" Margin="50,25,50,0">
                 <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
                     <Button x:Name="btnImportMesh" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Open Mesh">
-                        <Image Source="Images/open.png" Width="40" Height="40"/>
+                        <Image Source="Images/open_mesh.png" Width="40" Height="40"/>
+                    </Button>
+                    <Button x:Name="btnImportTexture" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Open Texture">
+                        <Image Source="Images/open_tex.png" Width="40" Height="40"/>
                     </Button>
                 </StackPanel>
 
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
+                    <ToggleButton x:Name="btnSolid" FontSize="14" Style="{DynamicResource StandardToggleButton}" ToolTip="Solid">
+                        <Image Source="Images/smooth.png" Width="40" Height="40"/>
+                    </ToggleButton>
+                    <ToggleButton x:Name="btnWireframe" FontSize="14" Style="{DynamicResource StandardToggleButton}" ToolTip="Wireframe">
+                        <Image Source="Images/wire.png" Width="40" Height="40"/>
+                    </ToggleButton>
+                    <ToggleButton x:Name="btnTexture" FontSize="14" Style="{DynamicResource StandardToggleButton}" ToolTip="Texture">
+                        <Image Source="Images/textures.png" Width="40" Height="40"/>
+                    </ToggleButton>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
+                    <Button x:Name="btnAnchor" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Rectangle Anchor points">
+                        <Image Source="Images/anchor.png" Width="40" Height="40"/>
+                    </Button>
+                    <Button x:Name="btnControl" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Rectangle Control points">
+                        <Image Source="Images/control.png" Width="40" Height="40"/>
+                    </Button>
+                </StackPanel>
             </StackPanel>
         </DockPanel>
 

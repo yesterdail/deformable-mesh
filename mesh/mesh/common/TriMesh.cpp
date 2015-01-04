@@ -89,41 +89,50 @@ namespace hj
     lens.clear();
   }
 
-  TriMesh* TriMesh::read(const char* filename, OpenMesh::IO::Options* opt)
+  bool TriMesh::read(const char* filename, OpenMesh::IO::Options* opt)
   {
-    TriMesh* mesh = new TriMesh;
-
     OpenMesh::IO::Options default_opt;
+    default_opt += OpenMesh::IO::Options::VertexNormal;
+    default_opt += OpenMesh::IO::Options::VertexTexCoord;
+    default_opt += OpenMesh::IO::Options::FaceNormal;
+    default_opt += OpenMesh::IO::Options::FaceTexCoord;
     if (!opt)
       opt = &default_opt;
 
-    if (!OpenMesh::IO::read_mesh(*mesh, filename, *opt)) {
-      delete mesh;
-      return NULL;
+    this->request_vertex_normals();
+    this->request_vertex_texcoords2D();
+    this->request_face_normals();
+
+    if (!OpenMesh::IO::read_mesh(*this, filename, *opt)) {
+      return false;
     }
 
-    // If the file did not provide vertex normals, then calculate them
-    if (!opt->check(OpenMesh::IO::Options::VertexNormal) &&
-      mesh->has_face_normals() && mesh->has_vertex_normals()) {
-      // let the mesh update the normals
-      mesh->update_normals();
-    }
-    // add additional properties
-    OpenMesh::VPropHandleT<TriMesh::Point> curvature;
-    mesh->add_property(curvature, "curvature");
-    OpenMesh::VPropHandleT<TriMesh::Point> curvature_color;
-    mesh->add_property(curvature_color, "curvature_color");
+    // update face and vertex normals     
+    if (!opt->check(OpenMesh::IO::Options::FaceNormal))
+      this->update_face_normals();
+    else
+      std::cout << "File provides face normals\n";
 
-    return mesh;
+    if (!opt->check(OpenMesh::IO::Options::VertexNormal))
+      this->update_vertex_normals();
+    else
+      std::cout << "File provides vertex normals\n";
+
+    // check for texcoord.
+    if (opt->check(OpenMesh::IO::Options::VertexTexCoord))
+      std::cout << "File provides texture coordinates\n";
+
+    option = *opt;
+    return true;
   }
 
-  bool TriMesh::save(const char* filename, TriMesh* mesh, OpenMesh::IO::Options* opt)
+  bool TriMesh::save(const char* filename, OpenMesh::IO::Options* opt)
   {
     OpenMesh::IO::Options default_opt;
     if (!opt)
       opt = &default_opt;
 
-    if (!OpenMesh::IO::write_mesh(*mesh, filename, *opt))
+    if (!OpenMesh::IO::write_mesh(*this, filename, *opt))
       return false;
     return true;
   }

@@ -51,6 +51,21 @@ namespace hj
     return mgr_ptr_->LoadMesh(native_file_path);
   }
 
+  bool ManagerCLR::LoadTexture(String^ filename)
+  {
+    std::string native_file_path;
+    char char_buffer[8192] = { 0 };
+    size_t converted = 0;
+    pin_ptr<const wchar_t> pinned_string = PtrToStringChars(filename);
+    wcstombs_s(&converted,
+      char_buffer,
+      sizeof(char_buffer),
+      pinned_string,
+      filename->Length);
+    native_file_path.assign(char_buffer);
+    return mgr_ptr_->LoadTexture(native_file_path);
+  }
+
   bool ManagerCLR::ResetCamera()
   {
     return mgr_ptr_->ResetCamera();
@@ -87,5 +102,30 @@ namespace hj
       newMouseY,
       lastMouseX,
       lastMouseY);
+  }
+
+  void ManagerCLR::SetSmooth()
+  {
+    mgr_ptr_->SetSmooth();
+  }
+
+  void ManagerCLR::SetFlat()
+  {
+    mgr_ptr_->SetFlat();
+  }
+
+  void ManagerCLR::SetWireframe(bool w)
+  {
+    mgr_ptr_->SetWireframe(w);
+  }
+
+  void ManagerCLR::SetSolid(bool s)
+  {
+    mgr_ptr_->SetSolid(s);
+  }
+
+  void ManagerCLR::SetTexture(bool t)
+  {
+    mgr_ptr_->SetTexture(t);
   }
 }

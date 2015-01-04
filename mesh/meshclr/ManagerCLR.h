@@ -58,6 +58,13 @@ namespace hj
     bool LoadMesh(String^ filename);
 
     /**
+    * Loads a texture.
+    * @param file_paths: path of mesh.
+    * @return: True if all parameters are valid, false otherwise.
+    */
+    bool LoadTexture(String^ filename);
+
+    /**
     * Resets positions/directions of the camera.
     * @return: True if successful, false otherwise.
     */
@@ -98,6 +105,31 @@ namespace hj
       float newMouseY,
       float lastMouseX,
       float lastMouseY);
+
+    /**
+    * Set smooth rendering.
+    */
+    void SetSmooth();
+
+    /**
+    * Set flat rendering.
+    */
+    void SetFlat();
+
+    /**
+    * Set wire frame rendering.
+    */
+    void SetWireframe(bool w);
+
+    /**
+    * Set solid rendering.
+    */
+    void SetSolid(bool s);
+
+    /**
+    * Set rendering with texture.
+    */
+    void SetTexture(bool t);
 
   private:
     /** Pointer to a VisualizationManager on the native heap. */

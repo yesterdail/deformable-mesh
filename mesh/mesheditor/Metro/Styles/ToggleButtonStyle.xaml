@@ -3,7 +3,7 @@
     <Style x:Key="StandardToggleButton" TargetType="ToggleButton">
         <Setter Property="Visibility" Value="Visible"/>
         <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
-        <Setter Property="Background" Value="{StaticResource BackgroundNormal}"/>
+        <Setter Property="Background" Value="{x:Null}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrushNormal}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -22,7 +22,7 @@
                             <Setter Property="Background" Value="{StaticResource BackgroundHighlighted}" />
                         </Trigger>
                         <Trigger Property="ToggleButton.IsChecked" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ApplicationAccentBrush}"/>
+                            <Setter Property="Background" Value="{x:Null}"/>
                             <Setter Property="BorderBrush" Value="{StaticResource ApplicationAccentBrush}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">

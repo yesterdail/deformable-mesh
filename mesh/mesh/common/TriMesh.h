@@ -24,6 +24,7 @@ namespace hj
 
   private:
     Point bbox_min, bbox_max;
+    OpenMesh::IO::Options option;
 
   public:
     void needBoundingBox();
@@ -33,9 +34,8 @@ namespace hj
     void request_curvature();
     void request_curvature_color();
 
-  public:
-    static TriMesh* read(const char* filename, OpenMesh::IO::Options* opt = NULL);
-    static bool save(const char* filename, TriMesh* mesh = NULL, OpenMesh::IO::Options* opt = NULL);
+    bool read(const char* filename, OpenMesh::IO::Options* opt = NULL);
+    bool save(const char* filename, OpenMesh::IO::Options* opt = NULL);
   };
 }
 

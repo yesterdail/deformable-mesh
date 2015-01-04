@@ -38,6 +38,11 @@ namespace hj
     return renderer_ptr_->LoadMesh(filename);
   }
 
+  bool Manager::LoadTexture(const std::string& filename)
+  {
+    return renderer_ptr_->LoadTexture(filename);
+  }
+
   bool Manager::ResetCamera()
   {
     return renderer_ptr_->ResetCamera();
@@ -74,5 +79,30 @@ namespace hj
       newMouseY,
       lastMouseX,
       lastMouseY);
+  }
+
+  void Manager::SetSmooth()
+  {
+    renderer_ptr_->SetSmooth();
+  }
+
+  void Manager::SetFlat()
+  {
+    renderer_ptr_->SetFlat();
+  }
+
+  void Manager::SetWireframe(bool w)
+  {
+    renderer_ptr_->SetWireframe(w);
+  }
+
+  void Manager::SetSolid(bool s)
+  {
+    renderer_ptr_->SetSolid(s);
+  }
+
+  void Manager::SetTexture(bool t)
+  {
+    renderer_ptr_->SetTexture(t);
   }
 }
