@@ -10,6 +10,8 @@ namespace hj
   class GLFramebuffer;
   class GLProgram;
   class Image;
+  class PCA;
+  class LaplacianSurface;
 
   class MeshRenderer
   {
@@ -128,6 +130,42 @@ namespace hj
     */
     void SetTexture(bool t);
 
+    /**
+    * Set anchor points.
+    * @param polygon: polygon points array.
+    */
+    void SetAnchorPoints(const std::vector<glm::vec2> &polygon);
+
+    /**
+    * Set control points.
+    * @param polygon: polygon points array.
+    */
+    void SetControlPoints(const std::vector<glm::vec2> &polygon);
+
+    /**
+    * actions after selection.
+    * @param point: mouse point.
+    */
+    bool PostSelection(const glm::vec2 &point);
+
+    /**
+    * mesh deformation.
+    * @param point: mouse point.
+    */
+    bool Deformation(const glm::vec2 &point);
+
+    /**
+    * Cancel deformation.
+    */
+    void CancelDeform();
+
+
+    TriMesh* GetMesh() { return mesh_; }
+
+    std::vector<TriMesh::VHandle>& GetControlPts() { return controlPts_; }
+
+    std::vector<TriMesh::VHandle>& GetAnchorPts() { return anchorPts_; }
+
   private:
 
     /**
@@ -139,6 +177,47 @@ namespace hj
     * draw the loaded mesh.
     */
     void drawMainObject(float r, float g, float b);
+
+    /**
+    * draw anchor points as red spheres, control points as green spheres
+    */
+    void drawAnchorAndControl();
+
+    /**
+    * get ROI region from lasso 2d
+    * project vertices to camera coordinate system, then project these points to near plane,
+    * then check if they're inside of the lasso lines (which is a polygon).
+    * check if point is inside of polygon
+    * http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/isInsideOfPolygon.html
+    * @param polygon: lasso3d point set.
+    */
+    void getLasso2dRegion(const std::vector<glm::vec2> &polygon);
+
+    /**
+    * vertex set -> face set
+    */
+    void vertex2Face(std::vector<TriMesh::VHandle> &vset,
+      std::vector<TriMesh::FHandle> &bfs);
+
+    /**
+    * face set -> vertex set
+    */
+    void face2Vertex(std::vector<TriMesh::VHandle> &vset,
+      std::vector<TriMesh::FHandle> &fset);
+
+    /**
+    * Transform point form view coordiante to world coordinate.
+    * @param point: point in view coordinate.
+    * @return: point in world coordinate.
+    */
+    Vec View2World(const Vec &point);
+
+    /**
+    * Transform point form world coordiante to view coordinate.
+    * @param point: point in world coordinate.
+    * @return: point in view coordinate.
+    */
+    Vec World2View(const Vec &point);
 
   private:
     /** Output frame buffer. */
@@ -178,6 +257,26 @@ namespace hj
     bool texture_;
 
     Image* texture_image_;
+
+    std::vector<TriMesh::FHandle> curFRoi_; // current bfs result, face list
+    std::vector<TriMesh::FHandle> allFRoi_; // all Roi with boolean operations in every step, face list
+    std::vector<TriMesh::VHandle> allVRoi_; // all Roi, vertex list
+
+    std::vector<TriMesh::VHandle> controlPts_; // control points, for deformation
+    std::vector<TriMesh::VHandle> anchorPts_; // anchor points, for deformation
+
+    PCA* pcaAnchor_;
+    PCA *pcaControl_;
+
+    bool isPreComputed_; // is precomputed (matrix factorization) or not
+
+    Vec curPointInWorld_; // current point in world coordinate system (picked by mouse)
+    Vec initialPointInCam_; // initial point in camera coordiante system, need the correct depth value later
+    Vec movingPointInWorld_; // point selected during moving (in world coordinate system)
+    TriMesh::Point translationInWorld_; // translation vector for all control points (in world coordinate system)
+
+    LaplacianSurface *ls_;
+    int ARAPIteration_; // ARAP's iteration times. 0 means naive LSE
   };
 }
 #endif // HJ_MeshRenderer_h__

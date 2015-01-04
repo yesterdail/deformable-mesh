@@ -131,6 +131,39 @@ namespace hj
     */
     void SetTexture(bool t);
 
+    /**
+    * Set anchor points.
+    * @param polygon: polygon points array.
+    */
+    void SetAnchorPoints(array<float>^ polyx,
+      array<float>^ polyy,
+      int count);
+
+    /**
+    * Set control points.
+    * @param polygon: polygon points array.
+    */
+    void SetControlPoints(array<float>^ polyx,
+      array<float>^ polyy,
+      int count);
+
+    /**
+    * actions after selection.
+    * @param point: mouse point.
+    */
+    bool PostSelection(float mouseX, float mouseY);
+
+    /**
+    * mesh deformation.
+    * @param point: mouse point.
+    */
+    bool Deformation(float mouseX, float mouseY);
+
+    /**
+    * Cancel deformation.
+    */
+    void CancelDeform();
+
   private:
     /** Pointer to a VisualizationManager on the native heap. */
     Manager* mgr_ptr_;

@@ -105,4 +105,37 @@ namespace hj
   {
     renderer_ptr_->SetTexture(t);
   }
+
+  void Manager::SetAnchorPoints(float *polyx, float *polyy, int count)
+  {
+    std::vector<glm::vec2> polygon;
+    for (int i = 0; i < count; ++i)
+      polygon.push_back(glm::vec2(polyx[i], polyy[i]));
+    renderer_ptr_->SetAnchorPoints(polygon);
+  }
+
+  void Manager::SetControlPoints(float *polyx,
+    float *polyy,
+    int count)
+  {
+    std::vector<glm::vec2> polygon;
+    for (int i = 0; i < count; ++i)
+      polygon.push_back(glm::vec2(polyx[i], polyy[i]));
+    renderer_ptr_->SetControlPoints(polygon);
+  }
+
+  bool Manager::PostSelection(float mouseX, float mouseY)
+  {
+    return renderer_ptr_->PostSelection(glm::vec2(mouseX, mouseY));
+  }
+
+  bool Manager::Deformation(float mouseX, float mouseY)
+  {
+    return renderer_ptr_->Deformation(glm::vec2(mouseX, mouseY));
+  }
+
+  void Manager::CancelDeform()
+  {
+    return renderer_ptr_->CancelDeform();
+  }
 }

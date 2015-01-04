@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mesh", "mesh\mesh.vcxproj", "{3977D2CF-4DAA-4584-9C2D-59CA8A772427}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D2782F7B-F308-4B3F-819E-D7C7F108559E} = {D2782F7B-F308-4B3F-819E-D7C7F108559E}
+		{0CA7E6D6-9282-40DD-8B40-4FFFF1398F49} = {0CA7E6D6-9282-40DD-8B40-4FFFF1398F49}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "meshclr", "meshclr\meshclr.vcxproj", "{D72663E8-7EC3-4239-AD70-3FBE74268114}"
 	ProjectSection(ProjectDependencies) = postProject

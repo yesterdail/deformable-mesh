@@ -3,8 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:drawTools="clr-namespace:mesheditor.DrawTools"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="1000">
+             d:DesignHeight="600" d:DesignWidth="1000" x:Name="_this">
+
+    <UserControl.Resources>
+        <drawTools:ToolTypeConverter x:Key="convToolType"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="360"/>
@@ -35,11 +41,20 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-                    <Button x:Name="btnAnchor" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Rectangle Anchor points">
+                    <!--<ToggleButton x:Name="btnToolPointer" FontSize="14" Tag="Pointer" Style="{DynamicResource StandardToggleButton}" ToolTip="Tool Pointer"
+                                  IsChecked="{Binding ElementName=_this, Path=Type, Mode=OneWay, Converter={StaticResource convToolType}, ConverterParameter=Pointer}">
+                        <Image Source="Images/pointer.png" Width="40" Height="40"/>
+                    </ToggleButton>-->
+                    <ToggleButton x:Name="btnToolAnchor" FontSize="14" Tag="Anchor" Style="{DynamicResource StandardToggleButton}" ToolTip="Tool Anchor points"
+                                  IsChecked="{Binding ElementName=_this, Path=Type, Mode=OneWay, Converter={StaticResource convToolType}, ConverterParameter=Anchor}">
                         <Image Source="Images/anchor.png" Width="40" Height="40"/>
-                    </Button>
-                    <Button x:Name="btnControl" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Rectangle Control points">
+                    </ToggleButton>
+                    <ToggleButton x:Name="btnToolControl" FontSize="14" Tag="Control" Style="{DynamicResource StandardToggleButton}" ToolTip="Tool Control points"
+                                  IsChecked="{Binding ElementName=_this, Path=Type, Mode=OneWay, Converter={StaticResource convToolType}, ConverterParameter=Control}">
                         <Image Source="Images/control.png" Width="40" Height="40"/>
+                    </ToggleButton>
+                    <Button x:Name="btnCancel" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Cancel">
+                        <Image Source="Images/cancel.png" Width="40" Height="40"/>
                     </Button>
                 </StackPanel>
             </StackPanel>
@@ -48,6 +63,7 @@
         <Border x:Name="border" Grid.Column="1" BorderBrush="{x:Null}" BorderThickness="1" Background="Black" Margin="2">
             <Grid x:Name="grid">
                 <Image x:Name="image"/>
+                <drawTools:DrawingCanvas x:Name="canvas" Background="Transparent"/>
             </Grid>
         </Border>
     </Grid>

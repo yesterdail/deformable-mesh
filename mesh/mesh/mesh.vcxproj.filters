@@ -46,6 +46,15 @@
     <ClCompile Include="common\TriMesh.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="common\ScanLine.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="core\PCA.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\LaplacianSurface.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -115,6 +124,18 @@
     </ClInclude>
     <ClInclude Include="common\TriMesh.h">
       <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\ScanLine.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="core\PCA.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="common\glgeometry.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="core\LaplacianSurface.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

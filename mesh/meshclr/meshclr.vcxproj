@@ -44,12 +44,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\build\bin_debug\</OutDir>
-    <IntDir>..\build\intermediate_debug\</IntDir>
+    <IntDir>..\build\intermediate_debug\$(TargetName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\build\bin_release\</OutDir>
-    <IntDir>..\build\intermediate_release\</IntDir>
+    <IntDir>..\build\intermediate_release\$(TargetName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

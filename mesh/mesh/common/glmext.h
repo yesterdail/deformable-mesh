@@ -37,6 +37,27 @@ namespace glm
   }
 
   template <typename T, precision P>
+  GLM_FUNC_DECL void get(detail::tmat4x4<T, P> const & v, double mat[16])
+  {
+    mat[0] = (double)v[0][0];
+    mat[1] = (double)v[0][1];
+    mat[2] = (double)v[0][2];
+    mat[3] = (double)v[0][3];
+    mat[4] = (double)v[1][0];
+    mat[5] = (double)v[1][1];
+    mat[6] = (double)v[1][2];
+    mat[7] = (double)v[1][3];
+    mat[8] = (double)v[2][0];
+    mat[9] = (double)v[2][1];
+    mat[10] = (double)v[2][2];
+    mat[11] = (double)v[2][3];
+    mat[12] = (double)v[3][0];
+    mat[13] = (double)v[3][1];
+    mat[14] = (double)v[3][2];
+    mat[15] = (double)v[3][3];
+  }
+
+  template <typename T, precision P>
   GLM_FUNC_DECL detail::tvec3<T, P> transformPoint(detail::tmat4x4<T, P> const & m,detail::tvec3<T, P> const & p)
   {
     detail::tvec4<T, P> point = detail::tvec4<T, P>(p, 1);

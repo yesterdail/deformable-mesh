@@ -4,6 +4,9 @@
 #include "common/Trackball.h"
 #include "common/ImageIO.h"
 #include "common/Image.h"
+#include "common/ScanLine.h"
+#include "PCA.h"
+#include "LaplacianSurface.h"
 
 namespace hj
 {
@@ -11,12 +14,16 @@ namespace hj
     : out_fbo_ptr_(NULL)
     , mesh_(NULL)
     , texture_image_(NULL)
+    , pcaAnchor_(NULL)
+    , pcaControl_(NULL)
+    , ls_(NULL)
     , center_(Point(0, 0, 0))
     , radius_(1)
     , fovy_(45)
     , wireframe_(true)
     , solid_(true)
     , texture_(false)
+    , isPreComputed_(false)
   {
   }
 
@@ -25,6 +32,9 @@ namespace hj
     DEL_PTR(out_fbo_ptr_);
     DEL_PTR(mesh_);
     DEL_PTR(texture_image_);
+    DEL_PTR(pcaAnchor_);
+    DEL_PTR(pcaControl_);
+    DEL_PTR(ls_);
   }
 
   bool MeshRenderer::Initialize(const glm::ivec2& view_size)
@@ -42,6 +52,12 @@ namespace hj
     glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
 
+    DEL_PTR(pcaAnchor_);
+    pcaAnchor_ = new PCA();
+    DEL_PTR(pcaControl_);
+    pcaControl_ = new PCA();
+    DEL_PTR(ls_);
+    ls_ = new LaplacianSurface(this);
     return true;
   }
 
@@ -106,11 +122,11 @@ namespace hj
       }
 
       // draw solid mesh, with polygon offset
-      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-      glEnable(GL_POLYGON_OFFSET_FILL);
-      glPolygonOffset(2.5f, 2.5f);
       if (solid_)
       {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glEnable(GL_POLYGON_OFFSET_FILL);
+        glPolygonOffset(2.5f, 2.5f);
         drawMainObject(0.8f, 1.0f, 1.0f);
       }
       if (wireframe_)
@@ -118,6 +134,10 @@ namespace hj
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         drawMainObject(0.5f, 0.5f, 0.5f);
       }
+
+      // draw control and anchor points.
+      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+      drawAnchorAndControl();
 
       glDisableClientState(GL_VERTEX_ARRAY);
       glDisableClientState(GL_NORMAL_ARRAY);
@@ -170,6 +190,8 @@ namespace hj
 
     ResetCamera();
 
+    pcaAnchor_->SetMesh(mesh_);
+    pcaControl_->SetMesh(mesh_);
     return true;
   }
 
@@ -280,6 +302,21 @@ namespace hj
       glDrawElements(GL_TRIANGLES, (GLsizei)triverts_.size(), GL_UNSIGNED_INT, &(triverts_[0]));
   }
 
+  void MeshRenderer::drawAnchorAndControl()
+  {
+    if (anchorPts_.size()>0)
+    {
+      glColor3d(1, 0, 0);
+      pcaAnchor_->drawPCAOBB();
+    }
+    if (controlPts_.size()>0)
+    {
+      glColor3d(0, 1, 0);
+      pcaControl_->drawControlSphere();
+    }
+  }
+
+
   void MeshRenderer::SetSmooth()
   {
     glShadeModel(GL_SMOOTH);
@@ -303,5 +340,201 @@ namespace hj
   void MeshRenderer::SetTexture(bool t)
   {
     texture_ = t;
+  }
+
+  void MeshRenderer::getLasso2dRegion(const std::vector<glm::vec2> &polygon)
+  {
+    if (polygon.size() <= 2) return;
+
+    double maxx = -DBL_MAX;
+    double maxy = -DBL_MAX;
+    double minx = DBL_MAX;
+    double miny = DBL_MAX;
+    for (size_t i = 0; i < polygon.size(); i++)
+    {
+      if (maxx< polygon[i].x) maxx = polygon[i].x;
+      if (maxy< polygon[i].y) maxy = polygon[i].y;
+      if (minx> polygon[i].x) minx = polygon[i].x;
+      if (miny> polygon[i].y) miny = polygon[i].y;
+    }
+
+    glm::mat4 volume2ClipCoord = projection_ * modelview_;
+    int view_width = out_fbo_ptr_->GetWidth();
+    int view_height = out_fbo_ptr_->GetHeight();
+
+    std::vector<TriMesh::VHandle> vset;
+    TriMesh::VertexIter v_it;
+    for (v_it = mesh_->vertices_begin(); v_it != mesh_->vertices_end(); ++v_it)
+    {
+      TriMesh::Point p = mesh_->point(v_it.handle());
+
+      // convert to view coordinate.
+      glm::vec4 point(p[0], p[1], p[2], 1);
+      point = volume2ClipCoord * point;
+      // NDC
+      point /= point.w;
+      // Window Coordinate
+      point.x = point.x * view_width * 0.5f + view_width * 0.5f;
+      point.y = point.y * view_height * 0.5f + view_height * 0.5f;
+
+      if (point[0] < minx || point[0] > maxx || point[1] < miny || point[1] > maxy)
+        continue;
+      if (ScanLine::PointInPolygon(polygon, glm::dvec2(point)))
+        vset.push_back(v_it.handle());
+    }
+    vertex2Face(vset, curFRoi_);
+    vset.clear();
+
+    // boolean operations
+    allFRoi_ = curFRoi_;
+
+    roiverts_.clear();
+    for (unsigned int i = 0; i<allFRoi_.size(); i++)
+    {
+      TriMesh::ConstFaceVertexIter fvit = mesh_->cfv_iter(allFRoi_[i]);
+      roiverts_.push_back(fvit.handle().idx());	++fvit;
+      roiverts_.push_back(fvit.handle().idx());	++fvit;
+      roiverts_.push_back(fvit.handle().idx());
+    }
+  }
+
+  void MeshRenderer::vertex2Face(std::vector<TriMesh::VHandle> &vset,
+    std::vector<TriMesh::FHandle> &bfs)
+  {
+    bfs.clear();
+    TriMesh::VertexFaceIter vf_it;
+    for (unsigned int i = 0; i<vset.size(); i++)
+    {
+      for (vf_it = mesh_->vf_iter(vset[i]); vf_it; ++vf_it)
+      {
+        if (vf_it.handle().is_valid())
+          bfs.push_back(vf_it.handle());
+      }
+    }
+    std::vector<TriMesh::FHandle>::iterator it;
+    std::sort(bfs.begin(), bfs.end());
+    it = std::unique(bfs.begin(), bfs.end());
+    bfs.resize(it - bfs.begin());
+  }
+
+  void MeshRenderer::face2Vertex(std::vector<TriMesh::VHandle> &vset,
+    std::vector<TriMesh::FHandle> &fset)
+  {
+    TriMesh::FaceVertexIter fv_it;
+    for (unsigned int i = 0; i<fset.size(); i++)
+    {
+      for (fv_it = mesh_->fv_iter(fset[i]); fv_it; ++fv_it)
+      {
+        if (fv_it.handle().is_valid())
+          vset.push_back(fv_it.handle());
+      }
+    }
+    std::vector<TriMesh::VHandle>::iterator it;
+    std::sort(vset.begin(), vset.end());
+    it = std::unique(vset.begin(), vset.end());
+    vset.resize(it - vset.begin());
+  }
+
+  void MeshRenderer::SetAnchorPoints(const std::vector<glm::vec2> &polygon)
+  {
+    if (!mesh_) return;
+    getLasso2dRegion(polygon); // get ROI
+
+    allVRoi_.clear();
+    face2Vertex(allVRoi_, allFRoi_);
+
+    anchorPts_ = allVRoi_;
+    pcaAnchor_->getPCAOBB(anchorPts_);
+
+    roiverts_.clear();
+    isPreComputed_ = false;
+  }
+
+  void MeshRenderer::SetControlPoints(const std::vector<glm::vec2> &polygon)
+  {
+    if (!mesh_) return;
+    getLasso2dRegion(polygon); // get ROI
+
+    allVRoi_.clear();
+    face2Vertex(allVRoi_, allFRoi_);
+
+    controlPts_ = allVRoi_;
+    pcaControl_->getControlSphere(controlPts_);
+
+    roiverts_.clear();
+    isPreComputed_ = false;
+  }
+
+  bool MeshRenderer::PostSelection(const glm::vec2 &point)
+  {
+    Vec centroid_world = pcaControl_->getCentroid();
+    Vec centroid_view = World2View(centroid_world);
+    double length = std::sqrt((centroid_view[0] - point[0]) * (centroid_view[0] - point[0]) +
+      (centroid_view[1] - point[1]) * (centroid_view[1] - point[1]));
+
+    if (length <= 30
+      && controlPts_.size() > 0
+      && anchorPts_.size() > 0) {
+      // select control points for deformation
+      curPointInWorld_ = pcaControl_->getCentroid();
+      initialPointInCam_ = World2View(curPointInWorld_);
+      return true;
+    }
+
+    return false;
+  }
+
+  bool MeshRenderer::Deformation(const glm::vec2 &point)
+  {
+    if (!isPreComputed_) {
+      ls_->PreCompute();
+      isPreComputed_ = true;
+    }
+    movingPointInWorld_[0] = point.x;
+    movingPointInWorld_[1] = point.y;
+    movingPointInWorld_[2] = initialPointInCam_[2]; // correct depth, now data->movingPointInWorld is actually the mouse position in camera with correct depth
+    movingPointInWorld_ = View2World(movingPointInWorld_); // data->movingPointInWorld is projected to world coordinate system
+    translationInWorld_[0] = (movingPointInWorld_ - curPointInWorld_)[0]; // translation displacement in world coordinate system
+    translationInWorld_[1] = (movingPointInWorld_ - curPointInWorld_)[1];
+    translationInWorld_[2] = (movingPointInWorld_ - curPointInWorld_)[2];
+    curPointInWorld_ = movingPointInWorld_; // update 
+    ls_->translationDeform(translationInWorld_); // deformation caused by translation
+    ARAPIteration_<3 ? ls_->ARAPDeform(ARAPIteration_) : ls_->ARAPDeform(3); // intermediate result, naive LSE
+    pcaControl_->getControlSphere(controlPts_);
+
+    return true;
+  }
+
+  Vec MeshRenderer::World2View(const Vec &p)
+  {
+    double dmodelview[16], dprojection[16];
+    glm::get(modelview_, dmodelview);
+    glm::get(projection_, dprojection);
+    GLint viewport[4] = { 0, 0, out_fbo_ptr_->GetWidth(), out_fbo_ptr_->GetHeight() };
+    glGetIntegerv(GL_VIEWPORT, viewport);
+
+    double x, y, z;
+    gluProject(p[0], p[1], p[2], dmodelview, dprojection, viewport, &x, &y, &z);
+
+    return Vec((float)x, (float)y, (float)z);
+  }
+
+  Vec MeshRenderer::View2World(const Vec &p)
+  {
+    double dmodelview[16], dprojection[16];
+    glm::get(modelview_, dmodelview);
+    glm::get(projection_, dprojection);
+    GLint viewport[4] = { 0, 0, out_fbo_ptr_->GetWidth(), out_fbo_ptr_->GetHeight() };
+
+    double x, y, z;
+    gluUnProject(p[0], p[1], p[2], dmodelview, dprojection, viewport, &x, &y, &z);
+
+    return Vec((float)x, (float)y, (float)z);
+  }
+
+  void MeshRenderer::CancelDeform()
+  {
+    anchorPts_.clear();
+    controlPts_.clear();
   }
 }

@@ -42,12 +42,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\build\bin_debug\</OutDir>
-    <IntDir>..\build\intermediate_debug\</IntDir>
+    <IntDir>..\build\intermediate_debug\$(TargetName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\build\bin_release\</OutDir>
-    <IntDir>..\build\intermediate_release\</IntDir>
+    <IntDir>..\build\intermediate_release\$(TargetName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -57,15 +57,15 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\3rdparty\include;.\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\3rdparty\include;.\;..\newmat;..\taucs</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4512;4127;4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\3rdparty\lib_debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32d.lib;OpenMeshCored.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\3rdparty\lib_debug;..\build\lib_debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32d.lib;OpenMeshCored.lib;newmat.lib;taucs.lib;libmetis.lib;libtaucs.lib;libumfpack.lib;libamd.lib;libgcc.lib;libg2c.lib;libatlas.lib;libcblas.lib;libf77blas.lib;liblapack.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\build\lib_debug\$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -79,7 +79,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\3rdparty\include;.\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\3rdparty\include;.\;..\newmat;..\taucs</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>4512;4127;4996</DisableSpecificWarnings>
     </ClCompile>
@@ -88,9 +88,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\3rdparty\lib_release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;OpenMeshCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\3rdparty\lib_release;..\build\lib_release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;OpenMeshCore.lib;newmat.lib;taucs.lib;libmetis.lib;libtaucs.lib;libumfpack.lib;libamd.lib;libgcc.lib;libg2c.lib;libatlas.lib;libcblas.lib;libf77blas.lib;liblapack.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\build\lib_release\$(TargetName).lib</ImportLibrary>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -105,15 +106,19 @@
     <ClCompile Include="common\ImageBmp.cpp" />
     <ClCompile Include="common\ImageIO.cpp" />
     <ClCompile Include="common\Pixel.cpp" />
+    <ClCompile Include="common\ScanLine.cpp" />
     <ClCompile Include="common\TrackBall.cpp" />
     <ClCompile Include="common\TriMesh.cpp" />
+    <ClCompile Include="core\LaplacianSurface.cpp" />
     <ClCompile Include="core\Manager.cpp" />
     <ClCompile Include="core\MeshRenderer.cpp" />
+    <ClCompile Include="core\PCA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\config.h" />
     <ClInclude Include="common\FileInfo.h" />
     <ClInclude Include="common\GLFramebuffer.h" />
+    <ClInclude Include="common\glgeometry.h" />
     <ClInclude Include="common\glmext.h" />
     <ClInclude Include="common\GLOffScreenRender.h" />
     <ClInclude Include="common\GLShader.h" />
@@ -127,10 +132,13 @@
     <ClInclude Include="common\macro.h" />
     <ClInclude Include="common\meshext.h" />
     <ClInclude Include="common\Pixel.h" />
+    <ClInclude Include="common\ScanLine.h" />
     <ClInclude Include="common\TrackBall.h" />
     <ClInclude Include="common\TriMesh.h" />
+    <ClInclude Include="core\LaplacianSurface.h" />
     <ClInclude Include="core\Manager.h" />
     <ClInclude Include="core\MeshRenderer.h" />
+    <ClInclude Include="core\PCA.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using mesheditor.Mesh.Helpers;
+using mesheditor.DrawTools;
 
 namespace mesheditor.Mesh
 {
@@ -15,6 +16,10 @@ namespace mesheditor.Mesh
 
     bool mouseDown = false;
     Point oldMouse;
+    bool onDeformation = false;
+
+    // Dependency properties
+    public static readonly DependencyProperty ToolTypeProperty;
 
     #endregion
 
@@ -25,6 +30,33 @@ namespace mesheditor.Mesh
       InitializeComponent();
 
       SubscribeToEvents();
+    }
+
+    static MeshPage()
+    {
+      PropertyMetadata metaData;
+
+      metaData = new PropertyMetadata(ToolType.Pointer);
+      ToolTypeProperty = DependencyProperty.Register(
+          "Type", typeof(ToolType), typeof(MeshPage),
+          metaData);
+    }
+
+    #endregion
+
+    #region Dependency Properties
+
+    public ToolType Type
+    {
+      get { return (ToolType)GetValue(ToolTypeProperty); }
+      set
+      {
+        if ((int)value >= 0 && (int)value < (int)ToolType.Max)
+        {
+          SetValue(ToolTypeProperty, value);
+          canvas.toolType = value;
+        }
+      }
     }
 
     #endregion
@@ -41,15 +73,35 @@ namespace mesheditor.Mesh
 
     #region Mouse Event Handlers
 
-    private void image_MouseDown(object sender, MouseButtonEventArgs e)
+    private void grid_MouseDown(object sender, MouseButtonEventArgs e)
     {
       mouseDown = true;
-      oldMouse = e.GetPosition(image);
+
+      if (canvas.DrawingCanvas_MouseDown(canvas, e)) return;
+
+      Point point = e.GetPosition(image);
+      if (Globals.Manager.PostSelection((float)point.X, (float)point.Y))
+      {
+        onDeformation = true;
+        return;
+      }
+
+      oldMouse = point;
     }
 
-    private void image_MouseMove(object sender, MouseEventArgs e)
+    private void grid_MouseMove(object sender, MouseEventArgs e)
     {
       if (!mouseDown) return;
+
+      if (canvas.DrawingCanvas_MouseMove(canvas, e)) return;
+
+      if (onDeformation)
+      {
+        Point point = e.GetPosition(image);
+        Globals.Manager.Deformation((float)point.X, (float)point.Y);
+        UpdateImage();
+        return;
+      }
 
       if (e.LeftButton == MouseButtonState.Pressed)
       {
@@ -74,9 +126,16 @@ namespace mesheditor.Mesh
       }
     }
 
-    private void image_MouseUp(object sender, MouseButtonEventArgs e)
+    private void grid_MouseUp(object sender, MouseButtonEventArgs e)
     {
       mouseDown = false;
+      onDeformation = false;
+
+      if (canvas.DrawingCanvas_MouseUp(canvas, e))
+      {
+        Type = ToolType.Pointer;
+        return;
+      }
     }
 
     #endregion
@@ -88,6 +147,7 @@ namespace mesheditor.Mesh
       int width = 0, height = 0;
       GetRegion(ref width, ref height);
 
+      Globals.MeshP = this;
       Globals.Manager = new hj.ManagerCLR();
       Globals.Manager.CreateView(width, height);
       Globals.Initialized = true;
@@ -174,6 +234,19 @@ namespace mesheditor.Mesh
       UpdateImage();
     }
 
+    private void ToolType_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+    {
+      Type = (ToolType)Enum.Parse(typeof(ToolType),
+        ((System.Windows.Controls.Primitives.ButtonBase)sender).Tag.ToString());
+      e.Handled = true;
+    }
+
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+      Globals.Manager.CancelDeform();
+      UpdateImage();
+    }
+
     #endregion
 
     #region Private Functions
@@ -190,10 +263,14 @@ namespace mesheditor.Mesh
       btnWireframe.Click += new RoutedEventHandler(btnWireframe_Click);
       btnSolid.Click += new RoutedEventHandler(btnSmooth_Click);
       btnTexture.Click += new RoutedEventHandler(btnTexture_Click);
+      //btnToolPointer.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
+      btnToolAnchor.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
+      btnToolControl.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
+      btnCancel.Click += new RoutedEventHandler(btnCancel_Click);
 
-      image.MouseDown += new MouseButtonEventHandler(image_MouseDown);
-      image.MouseMove += new MouseEventHandler(image_MouseMove);
-      image.MouseUp += new MouseButtonEventHandler(image_MouseUp);
+      grid.MouseDown += new MouseButtonEventHandler(grid_MouseDown);
+      grid.MouseMove += new MouseEventHandler(grid_MouseMove);
+      grid.MouseUp += new MouseButtonEventHandler(grid_MouseUp);
     }
 
     /// <summary>

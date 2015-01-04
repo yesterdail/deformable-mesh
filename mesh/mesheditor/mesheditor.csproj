@@ -70,6 +70,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DrawTools\DrawingCanvas.cs" />
+    <Compile Include="DrawTools\GraphicsBase.cs" />
+    <Compile Include="DrawTools\GraphicsRectangle.cs" />
+    <Compile Include="DrawTools\HelperFunctions.cs" />
+    <Compile Include="DrawTools\ToolObject.cs" />
+    <Compile Include="DrawTools\ToolPointer.cs" />
+    <Compile Include="DrawTools\ToolRectangleAnchor.cs" />
+    <Compile Include="DrawTools\ToolRectangleControl.cs" />
+    <Compile Include="DrawTools\ToolTypeConverter.cs" />
     <Compile Include="Mesh\Helpers\ByteImageConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -219,6 +228,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Mesh\Images\control.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DrawTools\Images\Line.cur" />
+    <Resource Include="DrawTools\Images\Rectangle.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Mesh\Images\cancel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

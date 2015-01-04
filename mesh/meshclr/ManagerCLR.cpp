@@ -128,4 +128,37 @@ namespace hj
   {
     mgr_ptr_->SetTexture(t);
   }
+
+  void ManagerCLR::SetAnchorPoints(array<float>^ polyx,
+    array<float>^ polyy,
+    int count)
+  {
+    pin_ptr<float> pinned_polyx = &polyx[0];
+    pin_ptr<float> pinned_polyy = &polyy[0];
+    return mgr_ptr_->SetAnchorPoints(pinned_polyx, pinned_polyy, count);
+  }
+
+  void ManagerCLR::SetControlPoints(array<float>^ polyx,
+    array<float>^ polyy,
+    int count)
+  {
+    pin_ptr<float> pinned_polyx = &polyx[0];
+    pin_ptr<float> pinned_polyy = &polyy[0];
+    return mgr_ptr_->SetControlPoints(pinned_polyx, pinned_polyy, count);
+  }
+
+  bool ManagerCLR::PostSelection(float mouseX, float mouseY)
+  {
+    return mgr_ptr_->PostSelection(mouseX, mouseY);
+  }
+
+  bool ManagerCLR::Deformation(float mouseX, float mouseY)
+  {
+    return mgr_ptr_->Deformation(mouseX, mouseY);
+  }
+
+  void ManagerCLR::CancelDeform()
+  {
+    return mgr_ptr_->CancelDeform();
+  }
 }

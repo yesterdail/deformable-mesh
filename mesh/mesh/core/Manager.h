@@ -125,6 +125,39 @@ namespace hj
     */
     HJ_EXPORT void SetTexture(bool t);
 
+    /**
+    * Set anchor points.
+    * @param polygon: polygon points array.
+    */
+    HJ_EXPORT void SetAnchorPoints(float *polyx,
+      float *polyy,
+      int count);
+
+    /**
+    * Set control points.
+    * @param polygon: polygon points array.
+    */
+    HJ_EXPORT void SetControlPoints(float *polyx,
+      float *polyy,
+      int count);
+
+    /**
+    * actions after selection.
+    * @param point: mouse point.
+    */
+    HJ_EXPORT bool PostSelection(float mouseX, float mouseY);
+
+    /**
+    * mesh deformation.
+    * @param point: mouse point.
+    */
+    HJ_EXPORT bool Deformation(float mouseX, float mouseY);
+
+    /**
+    * Cancel deformation.
+    */
+    HJ_EXPORT void CancelDeform();
+
   private:
     GLOffScreenRender* offscreen_render_ptr_;
 
