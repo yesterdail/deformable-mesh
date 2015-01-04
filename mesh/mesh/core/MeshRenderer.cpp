@@ -24,6 +24,7 @@ namespace hj
     , solid_(true)
     , texture_(false)
     , isPreComputed_(false)
+    , meshfile_("")
   {
   }
 
@@ -192,6 +193,8 @@ namespace hj
 
     pcaAnchor_->SetMesh(mesh_);
     pcaControl_->SetMesh(mesh_);
+
+    meshfile_ = filename;
     return true;
   }
 
@@ -502,6 +505,10 @@ namespace hj
     ARAPIteration_<3 ? ls_->ARAPDeform(ARAPIteration_) : ls_->ARAPDeform(3); // intermediate result, naive LSE
     pcaControl_->getControlSphere(controlPts_);
 
+    // update mesh center and radius.
+    mesh_->needBoundingBox();
+    center_ = mesh_->getSceneCenter();
+    radius_ = (float)mesh_->getSceneRadius();
     return true;
   }
 
@@ -536,5 +543,15 @@ namespace hj
   {
     anchorPts_.clear();
     controlPts_.clear();
+  }
+
+  void MeshRenderer::RestoreMesh()
+  {
+    if (meshfile_.empty() || !mesh_) return;
+
+    if (LoadMesh(meshfile_))
+    {
+      CancelDeform();
+    }
   }
 }

@@ -247,6 +247,12 @@ namespace mesheditor.Mesh
       UpdateImage();
     }
 
+    private void btnRestore_Click(object sender, RoutedEventArgs e)
+    {
+      Globals.Manager.RestoreMesh();
+      UpdateImage();
+    }
+
     #endregion
 
     #region Private Functions
@@ -267,6 +273,7 @@ namespace mesheditor.Mesh
       btnToolAnchor.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
       btnToolControl.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
       btnCancel.Click += new RoutedEventHandler(btnCancel_Click);
+      btnRestore.Click += new RoutedEventHandler(btnRestore_Click);
 
       grid.MouseDown += new MouseButtonEventHandler(grid_MouseDown);
       grid.MouseMove += new MouseEventHandler(grid_MouseMove);

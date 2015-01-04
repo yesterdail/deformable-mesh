@@ -138,4 +138,9 @@ namespace hj
   {
     return renderer_ptr_->CancelDeform();
   }
+
+  void  Manager::RestoreMesh()
+  {
+    return renderer_ptr_->RestoreMesh();
+  }
 }

@@ -159,6 +159,11 @@ namespace hj
     */
     void CancelDeform();
 
+    /**
+    * restore mesh to original.
+    */
+    void RestoreMesh();
+
 
     TriMesh* GetMesh() { return mesh_; }
 
@@ -277,6 +282,9 @@ namespace hj
 
     LaplacianSurface *ls_;
     int ARAPIteration_; // ARAP's iteration times. 0 means naive LSE
+
+    /** hold mesh file name for mesh restore. */
+    std::string meshfile_;
   };
 }
 #endif // HJ_MeshRenderer_h__

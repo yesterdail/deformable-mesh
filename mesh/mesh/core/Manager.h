@@ -158,6 +158,11 @@ namespace hj
     */
     HJ_EXPORT void CancelDeform();
 
+    /**
+    * restore mesh to original.
+    */
+    HJ_EXPORT void RestoreMesh();
+
   private:
     GLOffScreenRender* offscreen_render_ptr_;
 

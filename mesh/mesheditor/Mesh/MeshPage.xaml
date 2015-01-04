@@ -26,10 +26,8 @@
                     <Button x:Name="btnImportTexture" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Open Texture">
                         <Image Source="Images/open_tex.png" Width="40" Height="40"/>
                     </Button>
-                </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-                    <ToggleButton x:Name="btnSolid" FontSize="14" Style="{DynamicResource StandardToggleButton}" ToolTip="Solid">
+                    <ToggleButton x:Name="btnSolid" Margin="10,0,0,0" FontSize="14" Style="{DynamicResource StandardToggleButton}" ToolTip="Solid">
                         <Image Source="Images/smooth.png" Width="40" Height="40"/>
                     </ToggleButton>
                     <ToggleButton x:Name="btnWireframe" FontSize="14" Style="{DynamicResource StandardToggleButton}" ToolTip="Wireframe">
@@ -38,6 +36,10 @@
                     <ToggleButton x:Name="btnTexture" FontSize="14" Style="{DynamicResource StandardToggleButton}" ToolTip="Texture">
                         <Image Source="Images/textures.png" Width="40" Height="40"/>
                     </ToggleButton>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
+   
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
@@ -53,8 +55,11 @@
                                   IsChecked="{Binding ElementName=_this, Path=Type, Mode=OneWay, Converter={StaticResource convToolType}, ConverterParameter=Control}">
                         <Image Source="Images/control.png" Width="40" Height="40"/>
                     </ToggleButton>
-                    <Button x:Name="btnCancel" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Cancel">
+                    <Button x:Name="btnCancel" FontSize="14" Margin="10,0,0,0" Style="{DynamicResource TransparentButton}" ToolTip="Cancel Deformation">
                         <Image Source="Images/cancel.png" Width="40" Height="40"/>
+                    </Button>
+                    <Button x:Name="btnRestore" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Restore Mesh">
+                        <Image Source="Images/reset.png" Width="40" Height="40"/>
                     </Button>
                 </StackPanel>
             </StackPanel>

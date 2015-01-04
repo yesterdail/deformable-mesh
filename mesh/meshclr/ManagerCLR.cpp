@@ -161,4 +161,9 @@ namespace hj
   {
     return mgr_ptr_->CancelDeform();
   }
+
+  void ManagerCLR::RestoreMesh()
+  {
+    return mgr_ptr_->RestoreMesh();
+  }
 }

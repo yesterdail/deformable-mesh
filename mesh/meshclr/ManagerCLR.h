@@ -164,6 +164,11 @@ namespace hj
     */
     void CancelDeform();
 
+    /**
+    * restore mesh to original.
+    */
+    void RestoreMesh();
+
   private:
     /** Pointer to a VisualizationManager on the native heap. */
     Manager* mgr_ptr_;
