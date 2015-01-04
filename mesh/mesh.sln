@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mesheditor", "mesheditor\me
 		{D72663E8-7EC3-4239-AD70-3FBE74268114} = {D72663E8-7EC3-4239-AD70-3FBE74268114}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "taucs", "taucs\taucs.vcxproj", "{0CA7E6D6-9282-40DD-8B40-4FFFF1398F49}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "newmat", "newmat\newmat.vcxproj", "{D2782F7B-F308-4B3F-819E-D7C7F108559E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -33,6 +37,14 @@ Global
 		{4CA75A56-080C-43E6-B68B-63401724782A}.Debug|Win32.Build.0 = Debug|x86
 		{4CA75A56-080C-43E6-B68B-63401724782A}.Release|Win32.ActiveCfg = Release|x86
 		{4CA75A56-080C-43E6-B68B-63401724782A}.Release|Win32.Build.0 = Release|x86
+		{0CA7E6D6-9282-40DD-8B40-4FFFF1398F49}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0CA7E6D6-9282-40DD-8B40-4FFFF1398F49}.Debug|Win32.Build.0 = Debug|Win32
+		{0CA7E6D6-9282-40DD-8B40-4FFFF1398F49}.Release|Win32.ActiveCfg = Release|Win32
+		{0CA7E6D6-9282-40DD-8B40-4FFFF1398F49}.Release|Win32.Build.0 = Release|Win32
+		{D2782F7B-F308-4B3F-819E-D7C7F108559E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D2782F7B-F308-4B3F-819E-D7C7F108559E}.Debug|Win32.Build.0 = Debug|Win32
+		{D2782F7B-F308-4B3F-819E-D7C7F108559E}.Release|Win32.ActiveCfg = Release|Win32
+		{D2782F7B-F308-4B3F-819E-D7C7F108559E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

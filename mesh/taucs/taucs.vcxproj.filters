@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="chol_update.c" />
+    <ClCompile Include="matrix_operations.cpp" />
+    <ClCompile Include="SparseSolver.cpp" />
+    <ClCompile Include="taucs_interface.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SparseSolver.h" />
+    <ClInclude Include="taucs_interface.h" />
+    <ClInclude Include="taucsaddon.h" />
+  </ItemGroup>
+</Project>
