@@ -143,4 +143,23 @@ namespace hj
   {
     return renderer_ptr_->RestoreMesh();
   }
+
+  void Manager::SetLine(float startX,
+    float startY,
+    float endX,
+    float endY)
+  {
+    renderer_ptr_->SetLine(glm::vec2(startX, startY),
+      glm::vec2(endX, endY));
+  }
+
+  void Manager::SetLineDepth(float d)
+  {
+    renderer_ptr_->SetLineDepth(d);
+  }
+
+  float  Manager::GetLineDepth()
+  {
+    return renderer_ptr_->GetLineDepth();
+  }
 }

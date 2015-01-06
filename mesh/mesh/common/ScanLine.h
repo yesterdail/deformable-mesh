@@ -25,6 +25,19 @@ namespace hj
     */
     static bool PointInPolygon(const std::vector<glm::vec2> &polygon, const glm::vec2 &point);
 
+    /* Check whether segment P0P1 intersects with triangle t0t1t2 */
+    static bool Intersecting(const glm::vec2 &p0, 
+      const glm::vec2 &p1, 
+      const glm::vec2 &t0, 
+      const glm::vec2 &t1,
+      const glm::vec2 &t2);
+
+  private:
+    /* Check whether P and Q lie on the same side of line AB */
+    static float Side(const glm::vec2 &p,
+      const glm::vec2 &q, 
+      const glm::vec2 &a, 
+      const glm::vec2 &b);
   };
 }
 #endif // HJ_ScanLine_h__

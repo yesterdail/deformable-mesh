@@ -72,8 +72,10 @@
     </Compile>
     <Compile Include="DrawTools\DrawingCanvas.cs" />
     <Compile Include="DrawTools\GraphicsBase.cs" />
+    <Compile Include="DrawTools\GraphicsLine.cs" />
     <Compile Include="DrawTools\GraphicsRectangle.cs" />
     <Compile Include="DrawTools\HelperFunctions.cs" />
+    <Compile Include="DrawTools\ToolLine.cs" />
     <Compile Include="DrawTools\ToolObject.cs" />
     <Compile Include="DrawTools\ToolPointer.cs" />
     <Compile Include="DrawTools\ToolRectangleAnchor.cs" />

@@ -39,10 +39,6 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-   
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
                     <!--<ToggleButton x:Name="btnToolPointer" FontSize="14" Tag="Pointer" Style="{DynamicResource StandardToggleButton}" ToolTip="Tool Pointer"
                                   IsChecked="{Binding ElementName=_this, Path=Type, Mode=OneWay, Converter={StaticResource convToolType}, ConverterParameter=Pointer}">
                         <Image Source="Images/pointer.png" Width="40" Height="40"/>
@@ -62,6 +58,13 @@
                         <Image Source="Images/reset.png" Width="40" Height="40"/>
                     </Button>
                 </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
+                    <ToggleButton x:Name="btnToolLine" FontSize="14" Tag="Line" Style="{DynamicResource StandardToggleButton}" ToolTip="Tool Line"
+                                  IsChecked="{Binding ElementName=_this, Path=Type, Mode=OneWay, Converter={StaticResource convToolType}, ConverterParameter=Line}">
+                        <Image Source="Images/line.png" Width="40" Height="40"/>
+                    </ToggleButton>
+                </StackPanel>
             </StackPanel>
         </DockPanel>
 
@@ -69,6 +72,7 @@
             <Grid x:Name="grid">
                 <Image x:Name="image"/>
                 <drawTools:DrawingCanvas x:Name="canvas" Background="Transparent"/>
+                <Slider x:Name="slider" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,30" Orientation="Horizontal" Width="250" />
             </Grid>
         </Border>
     </Grid>

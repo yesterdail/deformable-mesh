@@ -166,4 +166,22 @@ namespace hj
   {
     return mgr_ptr_->RestoreMesh();
   }
+
+  void ManagerCLR::SetLine(float startX,
+    float startY,
+    float endX,
+    float endY)
+  {
+    mgr_ptr_->SetLine(startX, startY, endX, endY);
+  }
+
+  void ManagerCLR::SetLineDepth(float d)
+  {
+    mgr_ptr_->SetLineDepth(d);
+  }
+
+  float ManagerCLR::GetLineDepth()
+  {
+    return mgr_ptr_->GetLineDepth();
+  }
 }

@@ -163,6 +163,27 @@ namespace hj
     */
     HJ_EXPORT void RestoreMesh();
 
+    /**
+    * Set line.
+    * @param start: line start point.
+    * @param end: line end point.
+    */
+    HJ_EXPORT void SetLine(float startX,
+      float startY,
+      float endX,
+      float endY);
+
+    /**
+    * Set Segment line depth.
+    * @param d: depth.
+    */
+    HJ_EXPORT void SetLineDepth(float d);
+
+    /**
+    * Get Segment line depth.
+    */
+    HJ_EXPORT float GetLineDepth();
+
   private:
     GLOffScreenRender* offscreen_render_ptr_;
 

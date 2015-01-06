@@ -16,6 +16,7 @@ namespace mesheditor.DrawTools
     Pointer,
     Anchor,
     Control,
+    Line,
     Max
   }
 
@@ -50,6 +51,7 @@ namespace mesheditor.DrawTools
       tools[(int)ToolType.Pointer] = new ToolPointer();
       tools[(int)ToolType.Anchor] = new ToolRectangleAnchor();
       tools[(int)ToolType.Control] = new ToolRectangleControl();
+      tools[(int)ToolType.Line] = new ToolLine();
 
       //this.MouseDown += new MouseButtonEventHandler(DrawingCanvas_MouseDown);
       //this.MouseMove += new MouseEventHandler(DrawingCanvas_MouseMove);

@@ -25,6 +25,7 @@ namespace hj
     , texture_(false)
     , isPreComputed_(false)
     , meshfile_("")
+    , depth_(0.9f)
   {
   }
 
@@ -52,6 +53,7 @@ namespace hj
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_DEPTH_TEST);
 
     DEL_PTR(pcaAnchor_);
     pcaAnchor_ = new PCA();
@@ -128,11 +130,13 @@ namespace hj
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glEnable(GL_POLYGON_OFFSET_FILL);
         glPolygonOffset(2.5f, 2.5f);
+        drawROI(0.8, 0, 0);
         drawMainObject(0.8f, 1.0f, 1.0f);
       }
       if (wireframe_)
       {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        drawROI(0.8, 0, 0);
         drawMainObject(0.5f, 0.5f, 0.5f);
       }
 
@@ -151,6 +155,11 @@ namespace hj
 
   bool MeshRenderer::ResizeOutput(const glm::ivec2 &new_size)
   {
+    if (out_fbo_ptr_) {
+      if (new_size.x == out_fbo_ptr_->GetWidth()
+        && new_size.y == out_fbo_ptr_->GetHeight()) return true;
+    }
+
     DEL_PTR(out_fbo_ptr_);
     out_fbo_ptr_ = new GLFramebuffer(new_size.x, new_size.y);
     out_fbo_ptr_->CreateColorTexture(GL_COLOR_ATTACHMENT0,
@@ -319,6 +328,12 @@ namespace hj
     }
   }
 
+  void MeshRenderer::drawROI(double r, double g, double b)
+  {
+    glColor3d(r, g, b);
+    if (roiverts_.size() > 0)
+      glDrawElements(GL_TRIANGLES, (GLsizei)roiverts_.size(), GL_UNSIGNED_INT, &(roiverts_[0]));
+  }
 
   void MeshRenderer::SetSmooth()
   {
@@ -553,5 +568,68 @@ namespace hj
     {
       CancelDeform();
     }
+  }
+
+  void MeshRenderer::SetLine(const glm::dvec2 &start,
+    const glm::dvec2 &end)
+  {
+    start_ = start; end_ = end;
+
+    if (!mesh_) return;
+    curFRoi_.clear();
+    roiverts_.clear();
+
+    TriMesh::FaceIter f_it;
+    TriMesh::FaceVertexIter fv_it;
+    TriMesh::Point p;
+    std::vector<TriMesh::Point> triangle;
+    for (f_it = mesh_->faces_begin(); f_it != mesh_->faces_end(); ++f_it)
+    {
+      // get face vertices.
+      triangle.clear();
+      for (fv_it = mesh_->fv_iter(f_it); fv_it.is_valid(); ++fv_it)
+      {
+        p = mesh_->point(fv_it);  // model
+        p = World2View(p);        // view
+        triangle.push_back(p);
+      }
+
+      if (triangle.size() != 3) {
+        assert(0);
+        return;
+      }
+
+      // judge intersection with line.
+      if (ScanLine::Intersecting(start, end,
+        glm::vec2(triangle[0][0], triangle[0][1]),
+        glm::vec2(triangle[1][0], triangle[1][1]),
+        glm::vec2(triangle[2][0], triangle[2][1])))
+      {
+        // depth test
+        if (triangle[0][2] <= depth_ //depth_buffer_[(int)triangle[0][1] * width + (int)triangle[0][0]]
+          || triangle[1][2] <= depth_ // depth_buffer_[(int)triangle[1][1] * width + (int)triangle[1][0]]
+          || triangle[2][2] <= depth_) // depth_buffer_[(int)triangle[2][1] * width + (int)triangle[2][0]])
+          curFRoi_.push_back(f_it);
+      }
+    }
+
+    // face to vertices
+    for (unsigned int i = 0; i<curFRoi_.size(); i++)
+    {
+      TriMesh::ConstFaceVertexIter fvit = mesh_->cfv_iter(curFRoi_[i]);
+      roiverts_.push_back(fvit.handle().idx());	++fvit;
+      roiverts_.push_back(fvit.handle().idx());	++fvit;
+      roiverts_.push_back(fvit.handle().idx());
+    }
+  }
+
+  void MeshRenderer::SetLineDepth(float d)
+  {
+    if (std::abs(depth_ - d) < kEpsilonFloat) return;
+
+    if (d < 0) d = 0;
+    if (d > 1) d = 1;
+    depth_ = d;
+    SetLine(start_, end_);
   }
 }

@@ -164,6 +164,25 @@ namespace hj
     */
     void RestoreMesh();
 
+    /**
+    * Set line.
+    * @param start: line start point.
+    * @param end: line end point.
+    */
+    void SetLine(const glm::dvec2 &start, 
+      const glm::dvec2 &end);
+
+    /**
+    * Set Segment line depth.
+    * @param d: depth.
+    */
+    void SetLineDepth(float d);
+
+    /**
+    * Get Segment line depth.
+    */
+    float GetLineDepth() const { return depth_; }
+
 
     TriMesh* GetMesh() { return mesh_; }
 
@@ -187,6 +206,11 @@ namespace hj
     * draw anchor points as red spheres, control points as green spheres
     */
     void drawAnchorAndControl();
+
+    /**
+    * draw region-of-interest.
+    */
+    void drawROI(double r, double g, double b);
 
     /**
     * get ROI region from lasso 2d
@@ -285,6 +309,12 @@ namespace hj
 
     /** hold mesh file name for mesh restore. */
     std::string meshfile_;
+
+    /** line depth. */
+    float depth_;
+
+    /** line start point and end point. */
+    glm::dvec2 start_, end_;
   };
 }
 #endif // HJ_MeshRenderer_h__

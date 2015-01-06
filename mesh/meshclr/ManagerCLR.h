@@ -169,6 +169,27 @@ namespace hj
     */
     void RestoreMesh();
 
+    /**
+    * Set line.
+    * @param start: line start point.
+    * @param end: line end point.
+    */
+    void SetLine(float startX,
+      float startY,
+      float endX,
+      float endY);
+
+    /**
+    * Set Segment line depth.
+    * @param d: depth.
+    */
+    void SetLineDepth(float d);
+
+    /**
+    * Get Segment line depth.
+    */
+    float GetLineDepth();
+
   private:
     /** Pointer to a VisualizationManager on the native heap. */
     Manager* mgr_ptr_;
