@@ -113,6 +113,13 @@
     <ClCompile Include="core\Manager.cpp" />
     <ClCompile Include="core\MeshRenderer.cpp" />
     <ClCompile Include="core\PCA.cpp" />
+    <ClCompile Include="roi\GraphicsBase.cpp" />
+    <ClCompile Include="roi\GraphicsLine.cpp" />
+    <ClCompile Include="roi\GraphicsRenderer.cpp" />
+    <ClCompile Include="roi\Rect.cpp" />
+    <ClCompile Include="roi\ToolBase.cpp" />
+    <ClCompile Include="roi\ToolLine.cpp" />
+    <ClCompile Include="roi\ToolPointer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\config.h" />
@@ -139,6 +146,13 @@
     <ClInclude Include="core\Manager.h" />
     <ClInclude Include="core\MeshRenderer.h" />
     <ClInclude Include="core\PCA.h" />
+    <ClInclude Include="roi\GraphicsBase.h" />
+    <ClInclude Include="roi\GraphicsLine.h" />
+    <ClInclude Include="roi\GraphicsRenderer.h" />
+    <ClInclude Include="roi\Rect.h" />
+    <ClInclude Include="roi\ToolBase.h" />
+    <ClInclude Include="roi\ToolLine.h" />
+    <ClInclude Include="roi\ToolPointer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

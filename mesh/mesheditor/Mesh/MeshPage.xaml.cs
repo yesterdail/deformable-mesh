@@ -53,6 +53,7 @@ namespace mesheditor.Mesh
         if ((int)value >= 0 && (int)value < (int)ToolType.Max)
         {
           SetValue(ToolTypeProperty, value);
+          Globals.Manager.SetToolType((int)Type);
         }
       }
     }
@@ -76,6 +77,17 @@ namespace mesheditor.Mesh
       mouseDown = true;
 
       Point point = e.GetPosition(image);
+
+      // tool operation.
+      if (e.ChangedButton == MouseButton.Left)
+      {
+        if (Globals.Manager.OnMouseDown_GraphicsOverlay((float)point.X, (float)point.Y))
+        {
+          UpdateImage();
+          return;
+        }
+      }
+      
       if (Globals.Manager.PostSelection((float)point.X, (float)point.Y))
       {
         onDeformation = true;
@@ -89,9 +101,17 @@ namespace mesheditor.Mesh
     {
       if (!mouseDown) return;
 
+      Point point = e.GetPosition(image);
+
+      // tool operation.
+      if (Globals.Manager.OnMouseMove_GraphicsOverlay((float)point.X, (float)point.Y))
+      {
+        UpdateImage();
+        return;
+      }
+
       if (onDeformation)
       {
-        Point point = e.GetPosition(image);
         Globals.Manager.Deformation((float)point.X, (float)point.Y);
         UpdateImage();
         return;
@@ -99,21 +119,18 @@ namespace mesheditor.Mesh
 
       if (e.LeftButton == MouseButtonState.Pressed)
       {
-        Point point = e.GetPosition(image);
         Globals.Manager.Rotate((float)point.X, (float)point.Y, (float)oldMouse.X, (float)oldMouse.Y);
         UpdateImage();
         oldMouse = point;
       }
       else if (e.RightButton == MouseButtonState.Pressed)
       {
-        Point point = e.GetPosition(image);
         Globals.Manager.Zoom((float)point.X, (float)point.Y, (float)oldMouse.X, (float)oldMouse.Y);
         UpdateImage();
         oldMouse = point;
       }
       else if (e.MiddleButton == MouseButtonState.Pressed)
       {
-        Point point = e.GetPosition(image);
         Globals.Manager.Move((float)point.X, (float)point.Y, (float)oldMouse.X, (float)oldMouse.Y);
         UpdateImage();
         oldMouse = point;
@@ -124,6 +141,17 @@ namespace mesheditor.Mesh
     {
       mouseDown = false;
       onDeformation = false;
+
+      // tool operation.
+      if (e.ChangedButton == MouseButton.Left)
+      {
+        Point point = e.GetPosition(grid);
+        if (Globals.Manager.OnMouseUp_GraphicsOverlay((float)point.X, (float)point.Y))
+        {
+          UpdateImage();
+          return;
+        }
+      }
     }
 
     #endregion
@@ -148,6 +176,8 @@ namespace mesheditor.Mesh
       btnWireframe.IsChecked = w;
       btnSolid.IsChecked = s;
       btnTexture.IsChecked = t;
+
+      
 
       //slider.Minimum = 0.9;
       //slider.Maximum = 1;
@@ -234,6 +264,12 @@ namespace mesheditor.Mesh
       e.Handled = true;
     }
 
+    private void btnDelete_Click(object sender, RoutedEventArgs e)
+    {
+      Globals.Manager.RemoveAllGraphics();
+      UpdateImage();
+    }
+
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       Globals.Manager.CancelDeform();
@@ -263,13 +299,16 @@ namespace mesheditor.Mesh
     {
       this.Loaded += new System.Windows.RoutedEventHandler(UserControl_Loaded);
       this.SizeChanged += new SizeChangedEventHandler(UserControl_SizeChanged);
+
       btnImportMesh.Click += new RoutedEventHandler(btnImportMesh_Click);
       btnImportTexture.Click += new RoutedEventHandler(btnImportTexture_Click);
       btnWireframe.Click += new RoutedEventHandler(btnWireframe_Click);
       btnSolid.Click += new RoutedEventHandler(btnSmooth_Click);
       btnTexture.Click += new RoutedEventHandler(btnTexture_Click);
+
       btnToolPointer.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
       btnToolLine.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
+      btnDelete.Click += new RoutedEventHandler(btnDelete_Click);
       
       //btnToolAnchor.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
       //btnToolControl.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);

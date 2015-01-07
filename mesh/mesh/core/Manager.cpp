@@ -1,5 +1,8 @@
 #include "Manager.h"
 #include "common/GLOffScreenRender.h"
+#include "common/GLFramebuffer.h"
+#include "common/GLTexture.h"
+#include "roi/GraphicsRenderer.h"
 #include "MeshRenderer.h"
 
 namespace hj
@@ -7,30 +10,66 @@ namespace hj
 
 
   Manager::Manager()
+    : out_fbo_ptr_(NULL)
   {
     offscreen_render_ptr_ = new GLOffScreenRender();
     renderer_ptr_ = new MeshRenderer();
+    graphics_renderer_ptr_ = new GraphicsRenderer();
   }
 
   Manager::~Manager()
   {
     delete renderer_ptr_;
     delete offscreen_render_ptr_;
+    delete graphics_renderer_ptr_;
+    DEL_PTR(out_fbo_ptr_);
   }
 
   bool Manager::CreateView(int viewWidth, int viewHeight)
   {
-    return renderer_ptr_->Initialize(glm::ivec2(viewWidth, viewHeight));
+    return Resize(viewWidth, viewHeight);
   }
 
   const void Manager::GetView(uint8_t* output_buffer, int buffer_len)
   {
-    return renderer_ptr_->GetPixel(output_buffer, buffer_len, false);
+    if (!output_buffer) {
+      assert(0);
+      return;
+    }
+    if (!renderer_ptr_->Run()) {
+      assert(0);
+      return;
+    }
+    if (!graphics_renderer_ptr_->Run()) {
+      assert(0);
+      return;
+    }
+    GLTexture* texture_ptr = out_fbo_ptr_->GetTexture2D(GL_COLOR_ATTACHMENT0);
+    texture_ptr->DownloadTexture(output_buffer, buffer_len);
+    return;
   }
 
   bool Manager::Resize(int new_width, int new_height)
   {
-    return renderer_ptr_->ResizeOutput(glm::ivec2(new_width, new_height));
+    DEL_PTR(out_fbo_ptr_);
+    out_fbo_ptr_ = new GLFramebuffer(new_width, new_height);
+    out_fbo_ptr_->CreateColorTexture(GL_COLOR_ATTACHMENT0,
+      GL_RGB8,
+      GL_RGB,
+      GL_UNSIGNED_BYTE);
+    //out_fbo_ptr_->CreateColorTexture(GL_COLOR_ATTACHMENT1,
+    //  GL_RGB8,
+    //  GL_RGB,
+    //  GL_UNSIGNED_BYTE);
+    out_fbo_ptr_->CreateDepthBuffer();
+    if (!out_fbo_ptr_->IsOk()) {
+      assert(0);
+      return false;
+    }
+    renderer_ptr_->SetFBO(out_fbo_ptr_);
+    graphics_renderer_ptr_->SetFBO(out_fbo_ptr_);
+
+    return true;
   }
 
   bool Manager::LoadMesh(const std::string& filename)
@@ -161,5 +200,41 @@ namespace hj
   float  Manager::GetLineDepth()
   {
     return renderer_ptr_->GetLineDepth();
+  }
+
+  bool Manager::OnMouseDown_GraphicsOverlay(float x, float y)
+  {
+    return graphics_renderer_ptr_->OnMouseDown(glm::vec2(x, y));
+  }
+
+  bool Manager::OnMouseMove_GraphicsOverlay(float x, float y)
+  {
+    return graphics_renderer_ptr_->OnMouseMove(glm::vec2(x, y));
+  }
+
+  bool Manager::OnMouseUp_GraphicsOverlay(float x, float y)
+  {
+    return graphics_renderer_ptr_->OnMouseUp(glm::vec2(x, y));
+  }
+
+  void Manager::SetToolType(int type)
+  {
+    graphics_renderer_ptr_->SetToolType(
+      GraphicsRenderer::ToolType(type));
+  }
+
+  int Manager::GetToolType()
+  {
+    return graphics_renderer_ptr_->GetToolType();
+  }
+
+  void Manager::RemoveAllGraphics()
+  {
+    graphics_renderer_ptr_->RemoveAll();
+  }
+
+  void Manager::RemoveSelection()
+  {
+    graphics_renderer_ptr_->RemoveSelection();
   }
 }

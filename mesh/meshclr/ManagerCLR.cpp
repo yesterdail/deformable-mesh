@@ -184,4 +184,39 @@ namespace hj
   {
     return mgr_ptr_->GetLineDepth();
   }
+
+  bool ManagerCLR::OnMouseDown_GraphicsOverlay(float x, float y)
+  {
+    return mgr_ptr_->OnMouseDown_GraphicsOverlay(x, y);
+  }
+
+  bool ManagerCLR::OnMouseMove_GraphicsOverlay(float x, float y)
+  {
+    return mgr_ptr_->OnMouseMove_GraphicsOverlay(x, y);
+  }
+
+  bool ManagerCLR::OnMouseUp_GraphicsOverlay(float x, float y)
+  {
+    return mgr_ptr_->OnMouseUp_GraphicsOverlay(x, y);
+  }
+
+  void ManagerCLR::SetToolType(int type)
+  {
+    return mgr_ptr_->SetToolType(type);
+  }
+
+  int ManagerCLR::GetToolType()
+  {
+    return mgr_ptr_->GetToolType();
+  }
+
+  void ManagerCLR::RemoveAllGraphics()
+  {
+    return mgr_ptr_->RemoveAllGraphics();
+  }
+
+  void ManagerCLR::RemoveSelection()
+  {
+    return mgr_ptr_->RemoveSelection();
+  }
 }

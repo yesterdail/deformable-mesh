@@ -7,7 +7,9 @@
 namespace hj
 {
   class GLOffScreenRender;
+  class GLFramebuffer;
   class MeshRenderer;
+  class GraphicsRenderer;
 
   class Manager
   {
@@ -184,10 +186,55 @@ namespace hj
     */
     HJ_EXPORT float GetLineDepth();
 
+    /**
+    * Create New graphics when mouse down.
+    * @param x: mouse position X.
+    * @param y: mouse position Y.
+    */
+    HJ_EXPORT bool OnMouseDown_GraphicsOverlay(float x, float y);
+
+    /**
+    * resize new graphics when mouse move.
+    * @param x: mouse position X.
+    * @param y: mouse position Y.
+    */
+    HJ_EXPORT bool OnMouseMove_GraphicsOverlay(float x, float y);
+
+    /**
+    * Release mouse.
+    * @param x: mouse position X.
+    * @param y: mouse position Y.
+    */
+    HJ_EXPORT bool OnMouseUp_GraphicsOverlay(float x, float y);
+
+    /**
+    * Set current drawing graphics type.
+    */
+    HJ_EXPORT void SetToolType(int type);
+
+    /**
+    * Get current drawing graphics type.
+    */
+    HJ_EXPORT int GetToolType();
+
+    /**
+    * Remove all graphic objects.
+    */
+    HJ_EXPORT void RemoveAllGraphics();
+
+    /**
+    * Remove selected graphic object.
+    */
+    HJ_EXPORT void RemoveSelection();
+
   private:
     GLOffScreenRender* offscreen_render_ptr_;
 
+    GLFramebuffer* out_fbo_ptr_;
+
     MeshRenderer* renderer_ptr_;
+
+    GraphicsRenderer* graphics_renderer_ptr_;
   };
 }
 #endif // HJ_Manager_h__

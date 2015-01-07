@@ -55,6 +55,27 @@
     <ClCompile Include="core\LaplacianSurface.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="roi\GraphicsBase.cpp">
+      <Filter>roi</Filter>
+    </ClCompile>
+    <ClCompile Include="roi\GraphicsLine.cpp">
+      <Filter>roi</Filter>
+    </ClCompile>
+    <ClCompile Include="roi\GraphicsRenderer.cpp">
+      <Filter>roi</Filter>
+    </ClCompile>
+    <ClCompile Include="roi\Rect.cpp">
+      <Filter>roi</Filter>
+    </ClCompile>
+    <ClCompile Include="roi\ToolBase.cpp">
+      <Filter>roi</Filter>
+    </ClCompile>
+    <ClCompile Include="roi\ToolLine.cpp">
+      <Filter>roi</Filter>
+    </ClCompile>
+    <ClCompile Include="roi\ToolPointer.cpp">
+      <Filter>roi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -62,6 +83,9 @@
     </Filter>
     <Filter Include="core">
       <UniqueIdentifier>{23ef4a75-4718-4617-bb03-5dce2d967f6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="roi">
+      <UniqueIdentifier>{95fe06b5-c9df-493e-bd70-c60cbca03786}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +160,27 @@
     </ClInclude>
     <ClInclude Include="core\LaplacianSurface.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="roi\GraphicsBase.h">
+      <Filter>roi</Filter>
+    </ClInclude>
+    <ClInclude Include="roi\GraphicsLine.h">
+      <Filter>roi</Filter>
+    </ClInclude>
+    <ClInclude Include="roi\GraphicsRenderer.h">
+      <Filter>roi</Filter>
+    </ClInclude>
+    <ClInclude Include="roi\Rect.h">
+      <Filter>roi</Filter>
+    </ClInclude>
+    <ClInclude Include="roi\ToolBase.h">
+      <Filter>roi</Filter>
+    </ClInclude>
+    <ClInclude Include="roi\ToolLine.h">
+      <Filter>roi</Filter>
+    </ClInclude>
+    <ClInclude Include="roi\ToolPointer.h">
+      <Filter>roi</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

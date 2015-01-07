@@ -27,24 +27,6 @@ namespace hj
     , meshfile_("")
     , depth_(0.9f)
   {
-  }
-
-  MeshRenderer::~MeshRenderer()
-  {
-    DEL_PTR(out_fbo_ptr_);
-    DEL_PTR(mesh_);
-    DEL_PTR(texture_image_);
-    DEL_PTR(pcaAnchor_);
-    DEL_PTR(pcaControl_);
-    DEL_PTR(ls_);
-  }
-
-  bool MeshRenderer::Initialize(const glm::ivec2& view_size)
-  {
-    if (!ResizeOutput(view_size)) {
-      return false;
-    }
-
     glDisable(GL_DITHER);
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
@@ -53,7 +35,6 @@ namespace hj
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_DEPTH_TEST);
 
     DEL_PTR(pcaAnchor_);
     pcaAnchor_ = new PCA();
@@ -61,38 +42,28 @@ namespace hj
     pcaControl_ = new PCA();
     DEL_PTR(ls_);
     ls_ = new LaplacianSurface(this);
-    return true;
   }
 
-  void MeshRenderer::GetPixel(uint8_t* pixels,
-    uint32_t pixel_length,
-    bool swap_channels)
+  MeshRenderer::~MeshRenderer()
   {
-    if (!pixels) {
-      assert(0);
-      return;
-    }
-    if (!Run()) {
-      assert(0);
-      return;
-    }
-    GLTexture* texture_ptr = out_fbo_ptr_->GetTexture2D(GL_COLOR_ATTACHMENT0);
-    texture_ptr->DownloadTexture(pixels, pixel_length);
-    glFinish();
-    if (swap_channels) {
-      int pixel_count = pixel_length / 3;
-      uint8_t* ptr = pixels;
-      for (int i = 0; i < pixel_count; ++i) {
-        uint8_t tmp = ptr[2];
-        ptr[2] = ptr[0];
-        ptr[0] = tmp;
-        ptr += 3;
-      }
-    }
+    DEL_PTR(mesh_);
+    DEL_PTR(texture_image_);
+    DEL_PTR(pcaAnchor_);
+    DEL_PTR(pcaControl_);
+    DEL_PTR(ls_);
+  }
+
+  bool MeshRenderer::SetFBO(GLFramebuffer* fbo)
+  {
+    out_fbo_ptr_ = fbo;
+    return true;
   }
 
   bool MeshRenderer::Run()
   {
+    out_fbo_ptr_->Bind();
+    glDrawBuffer(GL_COLOR_ATTACHMENT0);
+
     glClearColor(0, 0, 0, 0);
     glClearDepth(1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -109,6 +80,7 @@ namespace hj
     // TODO: 
     if (mesh_)
     {
+      glEnable(GL_DEPTH_TEST);
       glEnableClientState(GL_VERTEX_ARRAY);
       glVertexPointer(3, GL_FLOAT, 0, mesh_->points());
       glEnableClientState(GL_NORMAL_ARRAY);
@@ -148,31 +120,10 @@ namespace hj
       glDisableClientState(GL_NORMAL_ARRAY);
       glDisableClientState(GL_TEXTURE_COORD_ARRAY);
       glDisable(GL_TEXTURE_2D);
+      glDisable(GL_DEPTH_TEST);
     }
-
+    out_fbo_ptr_->Unbind();
     return (GL_NO_ERROR == glGetError());
-  }
-
-  bool MeshRenderer::ResizeOutput(const glm::ivec2 &new_size)
-  {
-    if (out_fbo_ptr_) {
-      if (new_size.x == out_fbo_ptr_->GetWidth()
-        && new_size.y == out_fbo_ptr_->GetHeight()) return true;
-    }
-
-    DEL_PTR(out_fbo_ptr_);
-    out_fbo_ptr_ = new GLFramebuffer(new_size.x, new_size.y);
-    out_fbo_ptr_->CreateColorTexture(GL_COLOR_ATTACHMENT0,
-      GL_RGB8,
-      GL_RGB,
-      GL_UNSIGNED_BYTE);
-    out_fbo_ptr_->CreateDepthTexture();
-    if (!out_fbo_ptr_->IsOk()) {
-      assert(0);
-      return false;
-    }
-
-    return true;
   }
 
   bool MeshRenderer::LoadMesh(const std::string& filename)
@@ -486,7 +437,7 @@ namespace hj
   bool MeshRenderer::PostSelection(const glm::vec2 &point)
   {
     Vec centroid_world = pcaControl_->getCentroid();
-    Vec centroid_view = World2View(centroid_world);
+    Vec centroid_view = Model2View(centroid_world);
     double length = std::sqrt((centroid_view[0] - point[0]) * (centroid_view[0] - point[0]) +
       (centroid_view[1] - point[1]) * (centroid_view[1] - point[1]));
 
@@ -495,7 +446,7 @@ namespace hj
       && anchorPts_.size() > 0) {
       // select control points for deformation
       curPointInWorld_ = pcaControl_->getCentroid();
-      initialPointInCam_ = World2View(curPointInWorld_);
+      initialPointInCam_ = Model2View(curPointInWorld_);
       return true;
     }
 
@@ -511,7 +462,7 @@ namespace hj
     movingPointInWorld_[0] = point.x;
     movingPointInWorld_[1] = point.y;
     movingPointInWorld_[2] = initialPointInCam_[2]; // correct depth, now data->movingPointInWorld is actually the mouse position in camera with correct depth
-    movingPointInWorld_ = View2World(movingPointInWorld_); // data->movingPointInWorld is projected to world coordinate system
+    movingPointInWorld_ = View2Model(movingPointInWorld_); // data->movingPointInWorld is projected to world coordinate system
     translationInWorld_[0] = (movingPointInWorld_ - curPointInWorld_)[0]; // translation displacement in world coordinate system
     translationInWorld_[1] = (movingPointInWorld_ - curPointInWorld_)[1];
     translationInWorld_[2] = (movingPointInWorld_ - curPointInWorld_)[2];
@@ -527,7 +478,7 @@ namespace hj
     return true;
   }
 
-  Vec MeshRenderer::World2View(const Vec &p)
+  Vec MeshRenderer::Model2View(const Vec &p)
   {
     double dmodelview[16], dprojection[16];
     glm::get(modelview_, dmodelview);
@@ -541,7 +492,7 @@ namespace hj
     return Vec((float)x, (float)y, (float)z);
   }
 
-  Vec MeshRenderer::View2World(const Vec &p)
+  Vec MeshRenderer::View2Model(const Vec &p)
   {
     double dmodelview[16], dprojection[16];
     glm::get(modelview_, dmodelview);
@@ -590,7 +541,7 @@ namespace hj
       for (fv_it = mesh_->fv_iter(f_it); fv_it.is_valid(); ++fv_it)
       {
         p = mesh_->point(fv_it);  // model
-        p = World2View(p);        // view
+        p = Model2View(p);        // view
         triangle.push_back(p);
       }
 

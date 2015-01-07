@@ -68,6 +68,9 @@
                     <Button x:Name="btnCut" FontSize="14"  Margin="10,0,0,0" Style="{DynamicResource TransparentButton}" ToolTip="Cut">
                         <Image Source="Images/cut.png" Width="40" Height="40"/>
                     </Button>
+                    <Button x:Name="btnDelete" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Delete All Graphics">
+                        <Image Source="Images/delete.png" Width="40" Height="40"/>
+                    </Button>
                 </StackPanel>
             </StackPanel>
         </DockPanel>

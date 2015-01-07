@@ -190,6 +190,47 @@ namespace hj
     */
     float GetLineDepth();
 
+    /**
+    * Create New graphics when mouse down.
+    * @param x: mouse position X.
+    * @param y: mouse position Y.
+    */
+    bool OnMouseDown_GraphicsOverlay(float x, float y);
+
+    /**
+    * resize new graphics when mouse move.
+    * @param x: mouse position X.
+    * @param y: mouse position Y.
+    */
+    bool OnMouseMove_GraphicsOverlay(float x, float y);
+
+    /**
+    * Release mouse.
+    * @param x: mouse position X.
+    * @param y: mouse position Y.
+    */
+    bool OnMouseUp_GraphicsOverlay(float x, float y);
+
+    /**
+    * Set current drawing graphics type.
+    */
+    void SetToolType(int type);
+
+    /**
+    * Get current drawing graphics type.
+    */
+    int GetToolType();
+
+    /**
+    * Remove all graphic objects.
+    */
+    void RemoveAllGraphics();
+
+    /**
+    * Remove selected graphic object.
+    */
+    void RemoveSelection();
+
   private:
     /** Pointer to a VisualizationManager on the native heap. */
     Manager* mgr_ptr_;

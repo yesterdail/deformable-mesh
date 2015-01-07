@@ -6,6 +6,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using mesheditor.Metro.Native;
+using mesheditor.Mesh;
 
 namespace mesheditor
 {
@@ -98,6 +99,15 @@ namespace mesheditor
       }
     }
 
+    private void Window_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.Key == Key.Delete)
+      {
+        Globals.Manager.RemoveSelection();
+        Globals.MeshP.UpdateImage();
+      }
+    }
+
     #endregion
 
     #region Private Functions
@@ -109,6 +119,7 @@ namespace mesheditor
     {
       this.Closing += new System.ComponentModel.CancelEventHandler(Window_Closing);
       this.StateChanged += new EventHandler(Window_StateChanged);
+      this.KeyDown += new KeyEventHandler(Window_KeyDown);
 
       headerThumb.DragDelta += new DragDeltaEventHandler(headerThumb_DragDelta);
       headerThumb.MouseDoubleClick += new MouseButtonEventHandler(headerThumb_MouseDoubleClick);

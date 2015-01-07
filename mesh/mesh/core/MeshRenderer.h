@@ -27,27 +27,15 @@ namespace hj
     ~MeshRenderer();
 
     /**
-    * Sets pointer to input volume and view size
-    * @param view_size: render view size.
+    * Set FBO
     * @return: True if data are valid, false otherwise.
     */
-    bool Initialize(const glm::ivec2& view_size);
+    bool SetFBO(GLFramebuffer* fbo);
 
     /**
-    * Retrieves pixel data of an MPR view.
-    * @param pixels: Pointer to the buffer receiving pixel data.
-    * @param pixel_length: Size of pixels.
+    * Paint.
     */
-    void GetPixel(uint8_t* pixels,
-      uint32_t pixel_length,
-      bool swap_channels);
-
-    /**
-    * Resizes output image.
-    * @param view_size: render view size.
-    * @return: True if data are valid, false otherwise.
-    */
-    bool ResizeOutput(const glm::ivec2 &new_size);
+    bool Run();
 
     /**
     * Loads a mesh.
@@ -193,11 +181,6 @@ namespace hj
   private:
 
     /**
-    * Paint.
-    */
-    bool Run();
-
-    /**
     * draw the loaded mesh.
     */
     void drawMainObject(float r, float g, float b);
@@ -235,18 +218,18 @@ namespace hj
       std::vector<TriMesh::FHandle> &fset);
 
     /**
-    * Transform point form view coordiante to world coordinate.
+    * Transform point form view coordiante to model coordinate.
     * @param point: point in view coordinate.
-    * @return: point in world coordinate.
+    * @return: point in model coordinate.
     */
-    Vec View2World(const Vec &point);
+    Vec View2Model(const Vec &point);
 
     /**
-    * Transform point form world coordiante to view coordinate.
-    * @param point: point in world coordinate.
+    * Transform point form model coordiante to view coordinate.
+    * @param point: point in model coordinate.
     * @return: point in view coordinate.
     */
-    Vec World2View(const Vec &point);
+    Vec Model2View(const Vec &point);
 
   private:
     /** Output frame buffer. */
