@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace mesheditor.DrawTools
+namespace mesheditor.Mesh
 {
   /// <summary>
   /// Convert ToolType to bool.

@@ -59,25 +59,5 @@ namespace mesheditor.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Line {
-            get {
-                object obj = ResourceManager.GetObject("Line", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Rectangle {
-            get {
-                object obj = ResourceManager.GetObject("Rectangle", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

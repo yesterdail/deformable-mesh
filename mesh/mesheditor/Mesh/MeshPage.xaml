@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:drawTools="clr-namespace:mesheditor.DrawTools"
+             xmlns:mesh="clr-namespace:mesheditor.Mesh"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000" x:Name="_this">
 
     <UserControl.Resources>
-        <drawTools:ToolTypeConverter x:Key="convToolType"/>
+        <mesh:ToolTypeConverter x:Key="convToolType"/>
     </UserControl.Resources>
     
     <Grid>
@@ -38,11 +38,7 @@
                     </ToggleButton>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-                    <!--<ToggleButton x:Name="btnToolPointer" FontSize="14" Tag="Pointer" Style="{DynamicResource StandardToggleButton}" ToolTip="Tool Pointer"
-                                  IsChecked="{Binding ElementName=_this, Path=Type, Mode=OneWay, Converter={StaticResource convToolType}, ConverterParameter=Pointer}">
-                        <Image Source="Images/pointer.png" Width="40" Height="40"/>
-                    </ToggleButton>-->
+                <!--<StackPanel Orientation="Horizontal" Margin="0,4,0,4">
                     <ToggleButton x:Name="btnToolAnchor" FontSize="14" Tag="Anchor" Style="{DynamicResource StandardToggleButton}" ToolTip="Tool Anchor points"
                                   IsChecked="{Binding ElementName=_this, Path=Type, Mode=OneWay, Converter={StaticResource convToolType}, ConverterParameter=Anchor}">
                         <Image Source="Images/anchor.png" Width="40" Height="40"/>
@@ -57,13 +53,21 @@
                     <Button x:Name="btnRestore" FontSize="14" Style="{DynamicResource TransparentButton}" ToolTip="Restore Mesh">
                         <Image Source="Images/reset.png" Width="40" Height="40"/>
                     </Button>
-                </StackPanel>
+                </StackPanel>-->
 
                 <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-                    <ToggleButton x:Name="btnToolLine" FontSize="14" Tag="Line" Style="{DynamicResource StandardToggleButton}" ToolTip="Tool Line"
+                    <ToggleButton x:Name="btnToolPointer" FontSize="14" Tag="Pointer" Style="{DynamicResource StandardToggleButton}" ToolTip="Pointer"
+                                  IsChecked="{Binding ElementName=_this, Path=Type, Mode=OneWay, Converter={StaticResource convToolType}, ConverterParameter=Pointer}">
+                        <Image Source="Images/pointer.png" Width="40" Height="40"/>
+                    </ToggleButton>
+                    <ToggleButton x:Name="btnToolLine" FontSize="14" Tag="Line" Style="{DynamicResource StandardToggleButton}" ToolTip="Line"
                                   IsChecked="{Binding ElementName=_this, Path=Type, Mode=OneWay, Converter={StaticResource convToolType}, ConverterParameter=Line}">
                         <Image Source="Images/line.png" Width="40" Height="40"/>
                     </ToggleButton>
+
+                    <Button x:Name="btnCut" FontSize="14"  Margin="10,0,0,0" Style="{DynamicResource TransparentButton}" ToolTip="Cut">
+                        <Image Source="Images/cut.png" Width="40" Height="40"/>
+                    </Button>
                 </StackPanel>
             </StackPanel>
         </DockPanel>
@@ -71,8 +75,7 @@
         <Border x:Name="border" Grid.Column="1" BorderBrush="{x:Null}" BorderThickness="1" Background="Black" Margin="2">
             <Grid x:Name="grid">
                 <Image x:Name="image"/>
-                <drawTools:DrawingCanvas x:Name="canvas" Background="Transparent"/>
-                <Slider x:Name="slider" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,30" Orientation="Horizontal" Width="250" />
+                <!--<Slider x:Name="slider" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,30" Orientation="Horizontal" Width="250" />-->
             </Grid>
         </Border>
     </Grid>

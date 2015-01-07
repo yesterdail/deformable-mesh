@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using mesheditor.Mesh.Helpers;
-using mesheditor.DrawTools;
 
 namespace mesheditor.Mesh
 {
@@ -54,7 +53,6 @@ namespace mesheditor.Mesh
         if ((int)value >= 0 && (int)value < (int)ToolType.Max)
         {
           SetValue(ToolTypeProperty, value);
-          canvas.toolType = value;
         }
       }
     }
@@ -77,8 +75,6 @@ namespace mesheditor.Mesh
     {
       mouseDown = true;
 
-      if (canvas.DrawingCanvas_MouseDown(canvas, e)) return;
-
       Point point = e.GetPosition(image);
       if (Globals.Manager.PostSelection((float)point.X, (float)point.Y))
       {
@@ -92,8 +88,6 @@ namespace mesheditor.Mesh
     private void grid_MouseMove(object sender, MouseEventArgs e)
     {
       if (!mouseDown) return;
-
-      if (canvas.DrawingCanvas_MouseMove(canvas, e)) return;
 
       if (onDeformation)
       {
@@ -130,12 +124,6 @@ namespace mesheditor.Mesh
     {
       mouseDown = false;
       onDeformation = false;
-
-      if (canvas.DrawingCanvas_MouseUp(canvas, e))
-      {
-        Type = ToolType.Pointer;
-        return;
-      }
     }
 
     #endregion
@@ -161,10 +149,10 @@ namespace mesheditor.Mesh
       btnSolid.IsChecked = s;
       btnTexture.IsChecked = t;
 
-      slider.Minimum = 0.9;
-      slider.Maximum = 1;
-      slider.TickFrequency = 0.0001;
-      slider.Value = Globals.Manager.GetLineDepth();
+      //slider.Minimum = 0.9;
+      //slider.Maximum = 1;
+      //slider.TickFrequency = 0.0001;
+      //slider.Value = Globals.Manager.GetLineDepth();
     }
 
     private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -260,8 +248,8 @@ namespace mesheditor.Mesh
 
     private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
-      Globals.Manager.SetLineDepth((float)slider.Value);
-      UpdateImage();
+      //Globals.Manager.SetLineDepth((float)slider.Value);
+      //UpdateImage();
     }
 
     #endregion
@@ -280,18 +268,19 @@ namespace mesheditor.Mesh
       btnWireframe.Click += new RoutedEventHandler(btnWireframe_Click);
       btnSolid.Click += new RoutedEventHandler(btnSmooth_Click);
       btnTexture.Click += new RoutedEventHandler(btnTexture_Click);
-      //btnToolPointer.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
-      btnToolAnchor.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
-      btnToolControl.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
+      btnToolPointer.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
       btnToolLine.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
-      btnCancel.Click += new RoutedEventHandler(btnCancel_Click);
-      btnRestore.Click += new RoutedEventHandler(btnRestore_Click);
+      
+      //btnToolAnchor.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
+      //btnToolControl.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
+      //btnCancel.Click += new RoutedEventHandler(btnCancel_Click);
+      //btnRestore.Click += new RoutedEventHandler(btnRestore_Click);
 
       grid.MouseDown += new MouseButtonEventHandler(grid_MouseDown);
       grid.MouseMove += new MouseEventHandler(grid_MouseMove);
       grid.MouseUp += new MouseButtonEventHandler(grid_MouseUp);
 
-      slider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(Slider_ValueChanged);
+      //slider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(Slider_ValueChanged);
     }
 
     /// <summary>
