@@ -97,6 +97,7 @@
   <ItemGroup>
     <ClCompile Include="common\FileInfo.cpp" />
     <ClCompile Include="common\GLFramebuffer.cpp" />
+    <ClCompile Include="common\glgeometry.cpp" />
     <ClCompile Include="common\GLOffScreenRender.cpp" />
     <ClCompile Include="common\GLShader.cpp" />
     <ClCompile Include="common\GLTexture.cpp" />

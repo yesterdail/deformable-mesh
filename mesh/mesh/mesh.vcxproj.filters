@@ -76,6 +76,9 @@
     <ClCompile Include="roi\ToolPointer.cpp">
       <Filter>roi</Filter>
     </ClCompile>
+    <ClCompile Include="common\glgeometry.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

@@ -5,6 +5,7 @@
 #include "common/ImageIO.h"
 #include "common/Image.h"
 #include "common/ScanLine.h"
+#include "common/glgeometry.h"
 #include "PCA.h"
 #include "LaplacianSurface.h"
 #include "roi/GraphicsRenderer.h"
@@ -89,6 +90,10 @@ namespace hj
     glLoadMatrixf(fmodelview);
     glMatrixMode(GL_PROJECTION);
     glLoadMatrixf(fprojection);
+
+    //drawSolidCylinder(0.2, 1, 20, 1);
+    //drawSolidCylinder(0.25, 1, 20, 20);
+    //drawSolidCylinder(0.2, 1, 20, 20);
 
     // TODO: 
     if (mesh_)

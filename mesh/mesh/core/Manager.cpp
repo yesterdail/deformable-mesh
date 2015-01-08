@@ -28,7 +28,8 @@ namespace hj
 
   bool Manager::CreateView(int viewWidth, int viewHeight)
   {
-    return Resize(viewWidth, viewHeight);
+    return Resize(viewWidth, viewHeight)
+     && renderer_ptr_->ResetCamera();
   }
 
   const void Manager::GetView(uint8_t* output_buffer, int buffer_len)
