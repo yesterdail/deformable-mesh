@@ -170,14 +170,9 @@ namespace hj
     void RestoreMesh();
 
     /**
-    * Set line.
-    * @param start: line start point.
-    * @param end: line end point.
+    * Cut mesh accordint to the line.
     */
-    void SetLine(float startX,
-      float startY,
-      float endX,
-      float endY);
+    void CutMesh();
 
     /**
     * Set Segment line depth.

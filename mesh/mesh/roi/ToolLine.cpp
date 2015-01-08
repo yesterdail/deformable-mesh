@@ -14,6 +14,7 @@ namespace hj
   bool ToolLine::OnMouseDown(GraphicsRenderer* gren,
     const glm::dvec2 &point)
   {
+    gren->RemoveAll();
     current_obj_ = new GraphicsLine(
       point,
       point + glm::dvec2(1));

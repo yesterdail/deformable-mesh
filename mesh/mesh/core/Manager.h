@@ -166,14 +166,9 @@ namespace hj
     HJ_EXPORT void RestoreMesh();
 
     /**
-    * Set line.
-    * @param start: line start point.
-    * @param end: line end point.
+    * Cut mesh accordint to the line.
     */
-    HJ_EXPORT void SetLine(float startX,
-      float startY,
-      float endX,
-      float endY);
+    HJ_EXPORT void CutMesh();
 
     /**
     * Set Segment line depth.

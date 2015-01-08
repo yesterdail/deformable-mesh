@@ -66,6 +66,10 @@ namespace hj
     */
     virtual std::string GetClassName() const { return "GraphicsLine"; }
 
+    glm::vec2 GetStart() { return start_; }
+
+    glm::vec2 GetEnd() { return end_; }
+
   protected:
     /**
     * Number of handles.

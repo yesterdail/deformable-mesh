@@ -15,6 +15,7 @@ namespace hj
     offscreen_render_ptr_ = new GLOffScreenRender();
     renderer_ptr_ = new MeshRenderer();
     graphics_renderer_ptr_ = new GraphicsRenderer();
+    renderer_ptr_->SetAssociate(graphics_renderer_ptr_);
   }
 
   Manager::~Manager()
@@ -183,13 +184,9 @@ namespace hj
     return renderer_ptr_->RestoreMesh();
   }
 
-  void Manager::SetLine(float startX,
-    float startY,
-    float endX,
-    float endY)
+  void Manager::CutMesh()
   {
-    renderer_ptr_->SetLine(glm::vec2(startX, startY),
-      glm::vec2(endX, endY));
+    renderer_ptr_->CutMesh();
   }
 
   void Manager::SetLineDepth(float d)

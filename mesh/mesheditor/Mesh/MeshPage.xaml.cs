@@ -139,9 +139,6 @@ namespace mesheditor.Mesh
 
     private void grid_MouseUp(object sender, MouseButtonEventArgs e)
     {
-      mouseDown = false;
-      onDeformation = false;
-
       // tool operation.
       if (e.ChangedButton == MouseButton.Left)
       {
@@ -149,9 +146,12 @@ namespace mesheditor.Mesh
         if (Globals.Manager.OnMouseUp_GraphicsOverlay((float)point.X, (float)point.Y))
         {
           UpdateImage();
-          return;
         }
       }
+
+      mouseDown = false;
+      onDeformation = false;
+      Type = ToolType.Pointer;
     }
 
     #endregion
@@ -282,6 +282,12 @@ namespace mesheditor.Mesh
       UpdateImage();
     }
 
+    private void btnCut_Click(object sender, RoutedEventArgs e)
+    {
+      Globals.Manager.CutMesh();
+      UpdateImage();
+    }
+
     private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
       //Globals.Manager.SetLineDepth((float)slider.Value);
@@ -308,7 +314,8 @@ namespace mesheditor.Mesh
 
       btnToolPointer.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
       btnToolLine.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
-      btnDelete.Click += new RoutedEventHandler(btnDelete_Click);
+      btnCut.Click += new RoutedEventHandler(btnCut_Click);
+      //btnDelete.Click += new RoutedEventHandler(btnDelete_Click);
       
       //btnToolAnchor.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);
       //btnToolControl.PreviewMouseDown += new MouseButtonEventHandler(ToolType_PreviewMouseDown);

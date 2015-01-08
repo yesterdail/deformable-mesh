@@ -7,6 +7,8 @@
 #include "common/ScanLine.h"
 #include "PCA.h"
 #include "LaplacianSurface.h"
+#include "roi/GraphicsRenderer.h"
+#include "roi/GraphicsLine.h"
 
 namespace hj
 {
@@ -17,6 +19,7 @@ namespace hj
     , pcaAnchor_(NULL)
     , pcaControl_(NULL)
     , ls_(NULL)
+    , depth_buffer_(NULL)
     , center_(Point(0, 0, 0))
     , radius_(1)
     , fovy_(45)
@@ -26,6 +29,7 @@ namespace hj
     , isPreComputed_(false)
     , meshfile_("")
     , depth_(0.9f)
+    , gren_(NULL)
   {
     glDisable(GL_DITHER);
     glDepthFunc(GL_LESS);
@@ -51,12 +55,21 @@ namespace hj
     DEL_PTR(pcaAnchor_);
     DEL_PTR(pcaControl_);
     DEL_PTR(ls_);
+    DEL_ARRAY(depth_buffer_);
   }
 
   bool MeshRenderer::SetFBO(GLFramebuffer* fbo)
   {
     out_fbo_ptr_ = fbo;
+
+    DEL_ARRAY(depth_buffer_);
+    depth_buffer_ = new float[out_fbo_ptr_->GetWidth() * out_fbo_ptr_->GetHeight()];
     return true;
+  }
+
+  void MeshRenderer::SetAssociate(GraphicsRenderer* gren)
+  {
+    gren_ = gren;
   }
 
   bool MeshRenderer::Run()
@@ -521,14 +534,27 @@ namespace hj
     }
   }
 
-  void MeshRenderer::SetLine(const glm::dvec2 &start,
-    const glm::dvec2 &end)
+  void MeshRenderer::CutMesh()
   {
-    start_ = start; end_ = end;
+    if (!gren_ || gren_->GetGraphics().empty()) return;
+
+    GraphicsBase* obj = gren_->GetGraphics()[0];
+    if (obj->GetClassName() != "GraphicsLine") return;
+
+    GraphicsLine* gline = (GraphicsLine*)obj;
+    glm::vec2 start = gline->GetStart();
+    glm::vec2 end = gline->GetEnd();
 
     if (!mesh_) return;
     curFRoi_.clear();
     roiverts_.clear();
+
+    // get depth buffer
+    int width = out_fbo_ptr_->GetWidth();
+    int height = out_fbo_ptr_->GetHeight();
+    out_fbo_ptr_->Bind();
+    glReadPixels(0, 0, width, height, GL_DEPTH_COMPONENT, GL_FLOAT, depth_buffer_);
+    out_fbo_ptr_->Unbind();
 
     TriMesh::FaceIter f_it;
     TriMesh::FaceVertexIter fv_it;
@@ -557,9 +583,12 @@ namespace hj
         glm::vec2(triangle[2][0], triangle[2][1])))
       {
         // depth test
-        if (triangle[0][2] <= depth_ //depth_buffer_[(int)triangle[0][1] * width + (int)triangle[0][0]]
-          || triangle[1][2] <= depth_ // depth_buffer_[(int)triangle[1][1] * width + (int)triangle[1][0]]
-          || triangle[2][2] <= depth_) // depth_buffer_[(int)triangle[2][1] * width + (int)triangle[2][0]])
+        //if (triangle[0][2] <= depth_ //depth_buffer_[(int)triangle[0][1] * width + (int)triangle[0][0]]
+        //  || triangle[1][2] <= depth_ // depth_buffer_[(int)triangle[1][1] * width + (int)triangle[1][0]]
+        //  || triangle[2][2] <= depth_) // depth_buffer_[(int)triangle[2][1] * width + (int)triangle[2][0]])
+        if (triangle[0][2] <= depth_buffer_[(int)triangle[0][1] * width + (int)triangle[0][0]]
+          || triangle[1][2] <= depth_buffer_[(int)triangle[1][1] * width + (int)triangle[1][0]]
+          || triangle[2][2] <= depth_buffer_[(int)triangle[2][1] * width + (int)triangle[2][0]])
           curFRoi_.push_back(f_it);
       }
     }
@@ -572,6 +601,8 @@ namespace hj
       roiverts_.push_back(fvit.handle().idx());	++fvit;
       roiverts_.push_back(fvit.handle().idx());
     }
+
+    gren_->RemoveAll();
   }
 
   void MeshRenderer::SetLineDepth(float d)
@@ -581,6 +612,6 @@ namespace hj
     if (d < 0) d = 0;
     if (d > 1) d = 1;
     depth_ = d;
-    SetLine(start_, end_);
+    CutMesh();
   }
 }

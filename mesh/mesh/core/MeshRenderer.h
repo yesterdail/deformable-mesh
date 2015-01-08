@@ -12,6 +12,7 @@ namespace hj
   class Image;
   class PCA;
   class LaplacianSurface;
+  class GraphicsRenderer;
 
   class MeshRenderer
   {
@@ -31,6 +32,12 @@ namespace hj
     * @return: True if data are valid, false otherwise.
     */
     bool SetFBO(GLFramebuffer* fbo);
+
+    /**
+    * Set associate class.
+    * @return: True if data are valid, false otherwise.
+    */
+    void SetAssociate(GraphicsRenderer* gren);
 
     /**
     * Paint.
@@ -153,12 +160,9 @@ namespace hj
     void RestoreMesh();
 
     /**
-    * Set line.
-    * @param start: line start point.
-    * @param end: line end point.
+    * Cut mesh accordint to the line.
     */
-    void SetLine(const glm::dvec2 &start, 
-      const glm::dvec2 &end);
+    void CutMesh();
 
     /**
     * Set Segment line depth.
@@ -296,8 +300,10 @@ namespace hj
     /** line depth. */
     float depth_;
 
-    /** line start point and end point. */
-    glm::dvec2 start_, end_;
+    /** depth buffer. */
+    float* depth_buffer_;
+
+    GraphicsRenderer* gren_;
   };
 }
 #endif // HJ_MeshRenderer_h__
