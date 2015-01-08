@@ -95,7 +95,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="common\Camera.cpp" />
     <ClCompile Include="common\FileInfo.cpp" />
+    <ClCompile Include="common\Frustum.cpp" />
     <ClCompile Include="common\GLFramebuffer.cpp" />
     <ClCompile Include="common\glgeometry.cpp" />
     <ClCompile Include="common\GLOffScreenRender.cpp" />
@@ -123,8 +125,10 @@
     <ClCompile Include="roi\ToolPointer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="common\Camera.h" />
     <ClInclude Include="common\config.h" />
     <ClInclude Include="common\FileInfo.h" />
+    <ClInclude Include="common\Frustum.h" />
     <ClInclude Include="common\GLFramebuffer.h" />
     <ClInclude Include="common\glgeometry.h" />
     <ClInclude Include="common\glmext.h" />

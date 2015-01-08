@@ -4,6 +4,8 @@
 #include "common/macro.h"
 #include "common/glmext.h"
 #include "common/TriMesh.h"
+#include "common/Camera.h"
+#include "common/Trackball.h"
 
 namespace hj
 {
@@ -254,11 +256,9 @@ namespace hj
     /** ROI vertices for drawing. */
     std::vector<unsigned int> roiverts_;
 
-    /** model view transform matrix. */
-    glm::mat4 modelview_;
-
-    /** projection transform matrix. */
-    glm::mat4 projection_;
+    PerspectiveCamera camera_;
+    Trackball trackball_;
+    glm::mat4 model_;
 
     /** fov y in degree. */
     const float fovy_;

@@ -79,6 +79,12 @@
     <ClCompile Include="common\glgeometry.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="common\Camera.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\Frustum.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -184,6 +190,12 @@
     </ClInclude>
     <ClInclude Include="roi\ToolPointer.h">
       <Filter>roi</Filter>
+    </ClInclude>
+    <ClInclude Include="common\Camera.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\Frustum.h">
+      <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

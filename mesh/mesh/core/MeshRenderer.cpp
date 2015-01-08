@@ -83,8 +83,8 @@ namespace hj
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     float fmodelview[16], fprojection[16];
-    glm::get(modelview_, fmodelview);
-    glm::get(projection_, fprojection);
+    glm::get(camera_.GetViewMatrix() * model_, fmodelview);
+    glm::get(camera_.GetProjectionMatrix(), fprojection);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(fmodelview);
@@ -199,17 +199,24 @@ namespace hj
     int width = out_fbo_ptr_->GetWidth();
     int height = out_fbo_ptr_->GetHeight();
 
-    modelview_ = glm::translate(glm::dvec3(
-      -center_[0],
-      -center_[1],
-      -(center_[2] + radius_ * 2.0f)));
+    model_ = glm::translate(glm::vec3(-center_[0], -center_[1], -center_[2]));
 
-    projection_ = glm::perspective(
-      fovy_,
-      (float)width / height,
-      0.01f * radius_,
-      100.0f * radius_);
+    glm::vec3 eye = glm::vec3(0, 0, radius_ * 4);
+    glm::vec3 lookat = glm::vec3(0, 0, 0);
+    glm::vec3 updir = glm::vec3(0, 1, 0);
+    float zNear = std::abs(eye.z) - radius_;
+    float zFar = std::abs(eye.z) + radius_;
+    float aspect = (float)width / height;
+    float fovy = rad2deg(atan(radius_ / aspect / zNear)) * 2;
+    camera_.Initialize(eye,
+      lookat,
+      updir,
+      fovy,
+      aspect,
+      zNear,
+      zFar);
 
+    trackball_.SetCamera(&camera_);
     return true;
   }
 
@@ -221,31 +228,21 @@ namespace hj
     int w = out_fbo_ptr_->GetWidth();
     int h = out_fbo_ptr_->GetHeight();
 
-    glm::mat4 rotate_matrix = TrackBall::RotateMatrix(
+    trackball_.Rotate(glm::vec2(newMouseX, newMouseY),
       glm::vec2(lastMouseX, lastMouseY),
-      glm::vec2(newMouseX, newMouseY),
-      glm::ivec2(w, h));
-
-    glm::vec4 center_world = modelview_ *
-      glm::vec4(center_[0], center_[1], center_[2], 1);
-
-    modelview_ = glm::translate(glm::vec3(center_world)) *
-      rotate_matrix *
-      glm::translate(glm::vec3(-center_world)) *
-      modelview_;
+      w, h);
   }
 
-  void MeshRenderer::Zoom(float /*newMouseX*/,
+  void MeshRenderer::Zoom(float newMouseX,
     float newMouseY,
-    float /*lastMouseX*/,
+    float lastMouseX,
     float lastMouseY)
   {
+    int w = out_fbo_ptr_->GetWidth();
     int h = out_fbo_ptr_->GetHeight();
-    float dy = lastMouseY - newMouseY;
-    float value_y = radius_ * dy * 3.0f / h;
-
-    modelview_ = glm::translate(glm::vec3(0.0, 0.0, value_y))
-      * modelview_;
+    trackball_.Zoom(glm::vec2(newMouseX, newMouseY),
+      glm::vec2(lastMouseX, lastMouseY),
+      w, h);
   }
 
   void MeshRenderer::Move(float newMouseX,
@@ -256,24 +253,9 @@ namespace hj
     int w = out_fbo_ptr_->GetWidth();
     int h = out_fbo_ptr_->GetHeight();
 
-    newMouseY = h - newMouseY;
-    lastMouseY = h - lastMouseY;
-
-    float dx = newMouseX - lastMouseX;
-    float dy = newMouseY - lastMouseY;
-
-    glm::vec4 center_world = modelview_ *
-      glm::vec4(center_[0], center_[1], center_[2], 1);
-    float z = -center_world.z / center_world.w;
-
-    float aspect = (float)w / h;
-    float near_plane = 0.01f * radius_;
-    float top = tan(fovy_ / 2.0f * kPI / 180.0f) * near_plane;
-    float right = aspect*top;
-    modelview_ = glm::translate(glm::vec3(
-      2.0*dx / w*right / near_plane*z,
-      -2.0*dy / h*top / near_plane*z,
-      0.0f)) * modelview_;
+    trackball_.Move(glm::vec2(newMouseX, newMouseY),
+      glm::vec2(lastMouseX, lastMouseY),
+      w, h);
   }
 
   void MeshRenderer::drawMainObject(float r, float g, float b)
@@ -345,7 +327,8 @@ namespace hj
       if (miny> polygon[i].y) miny = polygon[i].y;
     }
 
-    glm::mat4 volume2ClipCoord = projection_ * modelview_;
+    //glm::mat4 volume2ClipCoord = projection_ * modelview_;
+    glm::mat4 volume2ClipCoord = camera_.GetViewProjectionMatrix() * model_;
     int view_width = out_fbo_ptr_->GetWidth();
     int view_height = out_fbo_ptr_->GetHeight();
 
@@ -499,8 +482,8 @@ namespace hj
   Vec MeshRenderer::Model2View(const Vec &p)
   {
     double dmodelview[16], dprojection[16];
-    glm::get(modelview_, dmodelview);
-    glm::get(projection_, dprojection);
+    glm::get(camera_.GetViewMatrix() * model_, dmodelview);
+    glm::get(camera_.GetProjectionMatrix(), dprojection);
     GLint viewport[4] = { 0, 0, out_fbo_ptr_->GetWidth(), out_fbo_ptr_->GetHeight() };
     glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -513,8 +496,8 @@ namespace hj
   Vec MeshRenderer::View2Model(const Vec &p)
   {
     double dmodelview[16], dprojection[16];
-    glm::get(modelview_, dmodelview);
-    glm::get(projection_, dprojection);
+    glm::get(camera_.GetViewMatrix() * model_, dmodelview);
+    glm::get(camera_.GetProjectionMatrix(), dprojection);
     GLint viewport[4] = { 0, 0, out_fbo_ptr_->GetWidth(), out_fbo_ptr_->GetHeight() };
 
     double x, y, z;
