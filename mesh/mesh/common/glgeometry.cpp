@@ -250,4 +250,74 @@ namespace hj
     free(sint);
     free(cost);
   }
+
+  void _draw(const double *sint, const double *cost, GLdouble radius, GLdouble height, GLint slices, GLint stacks)
+  {
+    int i, j;
+    double z0, z1;
+    const double zStep = height / ((stacks > 0) ? stacks : 1);
+
+    z0 = -height * 0.5;
+    z1 = z0 + zStep;
+
+    for (i = 1; i <= stacks; i++)
+    {
+      if (i == stacks)
+        z1 = height * 0.5;
+
+      glBegin(GL_QUAD_STRIP);
+      for (j = 0; j <= slices; j++)
+      {
+        glNormal3d(cost[j], sint[j], 0.0);
+        glVertex3d(cost[j] * radius, sint[j] * radius, z0);
+        glVertex3d(cost[j] * radius, sint[j] * radius, z1);
+      }
+      glEnd();
+
+      z0 = z1; z1 += zStep;
+    }
+  }
+
+  void drawSolidCylinder(GLdouble innter_radius, GLdouble outer_radius, GLdouble height, GLint slices, GLint stacks)
+  {
+    int j;
+
+    /* Pre-computed circle */
+
+    double *sint, *cost;
+
+    fghCircleTable(&sint, &cost, -slices);
+
+    /* Do the stacks */
+
+    glCullFace(GL_FRONT);
+    _draw(sint, cost, innter_radius, height, slices, stacks);
+    glCullFace(GL_BACK);
+    _draw(sint, cost, outer_radius, height, slices, stacks);
+
+    /* Cover the base and top */
+
+    glBegin(GL_QUAD_STRIP);
+    glNormal3d(0.0, 0.0, -1.0);
+    for (j = 0; j <= slices; j++)
+    {
+      glVertex3d(cost[j] * innter_radius, sint[j] * innter_radius, -height * 0.5);
+      glVertex3d(cost[j] * outer_radius, sint[j] * outer_radius, -height * 0.5);
+    }
+    glEnd();
+
+    glBegin(GL_QUAD_STRIP);
+    glNormal3d(0.0, 0.0, 1.0);
+    for (j = slices; j >= 0; j--)
+    {
+      glVertex3d(cost[j] * innter_radius, sint[j] * innter_radius, height * 0.5);
+      glVertex3d(cost[j] * outer_radius, sint[j] * outer_radius, height * 0.5);
+    }
+    glEnd();
+    
+    /* Release sin and cos tables */
+
+    free(sint);
+    free(cost);
+  }
 }

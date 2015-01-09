@@ -22,6 +22,8 @@ namespace hj
   * Draws a wire cylinder
   */
   void drawWireCylinder(GLdouble radius, GLdouble height, GLint slices, GLint stacks);
+
+  void drawSolidCylinder(GLdouble innter_radius, GLdouble outer_radius, GLdouble height, GLint slices, GLint stacks);
 }
 
 #endif // HJ_GLGeometyr_h__

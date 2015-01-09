@@ -72,6 +72,13 @@
                         <Image Source="Images/delete.png" Width="40" Height="40"/>
                     </Button>-->
                 </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
+                    <ToggleButton x:Name="btnAddCylinder" FontSize="14" Tag="AddCylinder" Style="{DynamicResource StandardToggleButton}" ToolTip="Add Cylinder"
+                                  IsChecked="{Binding ElementName=_this, Path=Type, Mode=OneWay, Converter={StaticResource convToolType}, ConverterParameter=AddCylinder}">
+                        <Image Source="Images/cylinder.png" Width="40" Height="40"/>
+                    </ToggleButton>
+                </StackPanel>
             </StackPanel>
         </DockPanel>
 

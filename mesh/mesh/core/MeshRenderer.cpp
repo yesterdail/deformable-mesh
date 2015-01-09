@@ -91,9 +91,7 @@ namespace hj
     glMatrixMode(GL_PROJECTION);
     glLoadMatrixf(fprojection);
 
-    //drawSolidCylinder(0.2, 1, 20, 1);
-    //drawSolidCylinder(0.25, 1, 20, 20);
-    //drawSolidCylinder(0.2, 1, 20, 20);
+    drawSolidCylinder(0.2, 0.25, 0.5, 20, 1);
 
     // TODO: 
     if (mesh_)
