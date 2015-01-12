@@ -111,6 +111,7 @@
     <ClCompile Include="common\Pixel.cpp" />
     <ClCompile Include="common\ScanLine.cpp" />
     <ClCompile Include="common\TrackBall.cpp" />
+    <ClCompile Include="common\TrackBall2.cpp" />
     <ClCompile Include="common\TriMesh.cpp" />
     <ClCompile Include="core\LaplacianSurface.cpp" />
     <ClCompile Include="core\Manager.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="common\Pixel.h" />
     <ClInclude Include="common\ScanLine.h" />
     <ClInclude Include="common\TrackBall.h" />
+    <ClInclude Include="common\TrackBall2.h" />
     <ClInclude Include="common\TriMesh.h" />
     <ClInclude Include="core\LaplacianSurface.h" />
     <ClInclude Include="core\Manager.h" />

@@ -85,6 +85,9 @@
     <ClCompile Include="common\Frustum.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="common\TrackBall2.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -195,6 +198,9 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="common\Frustum.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\TrackBall2.h">
       <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>

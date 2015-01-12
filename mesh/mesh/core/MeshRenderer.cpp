@@ -2,6 +2,7 @@
 #include "common/GLFramebuffer.h"
 #include "common/GLTexture.h"
 #include "common/Trackball.h"
+#include "common/Trackball2.h"
 #include "common/ImageIO.h"
 #include "common/Image.h"
 #include "common/ScanLine.h"
@@ -13,6 +14,9 @@
 
 namespace hj
 {
+
+  const int kiMeshStencilRef= 1;
+
   MeshRenderer::MeshRenderer()
     : out_fbo_ptr_(NULL)
     , mesh_(NULL)
@@ -101,7 +105,7 @@ namespace hj
       else
         glColor3f(0.8f, 1.0f, 1.0f);
 
-      glStencilFunc(GL_ALWAYS, (GLint)(i + 1), (GLuint)-1);
+      glStencilFunc(GL_ALWAYS, kiMeshStencilRef + i + 1, (GLuint)-1);
 
       drawSolidCylinder(c.inner_radius, c.outer_radius, c.height, 20, 1);
     }
@@ -130,6 +134,7 @@ namespace hj
       }
 
       // draw solid mesh, with polygon offset
+      glStencilFunc(GL_ALWAYS, kiMeshStencilRef, (GLuint)-1);
       if (solid_)
       {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -243,6 +248,30 @@ namespace hj
     int w = out_fbo_ptr_->GetWidth();
     int h = out_fbo_ptr_->GetHeight();
 
+    Cylinder* cyl = NULL;
+    for (size_t i = 0; i < cylinders_.size(); ++i) {
+      if (cylinders_[i].selected) {
+        cyl = &cylinders_[i];
+        
+        glm::mat4 view = camera_.GetViewMatrix();
+        glm::mat4 view_rotation = glm::mat4(0);
+        view_rotation[0][0] = view[0][0]; view_rotation[0][1] = view[0][1]; view_rotation[0][2] = view[0][2];
+        view_rotation[1][0] = view[1][0]; view_rotation[1][1] = view[1][1]; view_rotation[1][2] = view[1][2];
+        view_rotation[2][0] = view[2][0]; view_rotation[2][1] = view[2][1]; view_rotation[2][2] = view[2][2];
+        view_rotation[3][3] = 1;
+
+        glm::mat4 rotate_matrix = TrackBall2::RotateMatrix(
+          glm::vec2(lastMouseX, lastMouseY),
+          glm::vec2(newMouseX, newMouseY),
+          glm::ivec2(w, h),
+          glm::inverse(view_rotation));
+
+        cyl->rotate = rotate_matrix * cyl->rotate;
+        cyl->model_matrix = glm::translate(cyl->center_world) * cyl->rotate;
+        return;
+      }
+    }
+
     trackball_.Rotate(glm::vec2(newMouseX, newMouseY),
       glm::vec2(lastMouseX, lastMouseY),
       w, h);
@@ -267,6 +296,25 @@ namespace hj
   {
     int w = out_fbo_ptr_->GetWidth();
     int h = out_fbo_ptr_->GetHeight();
+
+    Cylinder* cyl = NULL;
+    for (size_t i = 0; i < cylinders_.size(); ++i) {
+      if (cylinders_[i].selected) {
+        cyl = &cylinders_[i];
+        
+        glm::vec3 center(0); // view
+        center = glm::transformPoint(cyl->model_matrix, center); // world
+        Vec c_view = World2View(Vec(center.x, center.y, center.z)); // view
+
+        Vec p1_world = View2World(Vec(newMouseX, newMouseY, c_view[2]));
+        Vec p2_world = View2World(Vec(lastMouseX, lastMouseY, c_view[2]));
+        Vec motion = p1_world - p2_world;
+        cyl->center_world += glm::vec3(motion[0], motion[1], motion[2]);
+        cyl->model_matrix = glm::translate(cyl->center_world) * cyl->rotate;
+        
+        return;
+      }
+    }
 
     trackball_.Move(glm::vec2(newMouseX, newMouseY),
       glm::vec2(lastMouseX, lastMouseY),
@@ -688,8 +736,8 @@ namespace hj
     glReadPixels(int(mouseX), int(mouseY), 1, 1, GL_STENCIL_INDEX, GL_BYTE, &index);
     out_fbo_ptr_->Unbind();
 
-    if (index > 0 && index <= (char)cylinders_.size()) {
-      cylinders_[index - 1].selected = true;
+    if (index > kiMeshStencilRef && index <= (char)cylinders_.size() + kiMeshStencilRef) {
+      cylinders_[index - 1 - kiMeshStencilRef].selected = true;
       return true;
     }
       

@@ -23,6 +23,7 @@ namespace hj
     float height;
     glm::vec3 center_world;
     glm::mat4 model_matrix;
+    glm::mat4 rotate;
     bool selected;
   };
 
