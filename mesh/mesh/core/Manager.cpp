@@ -63,7 +63,8 @@ namespace hj
     //  GL_RGB8,
     //  GL_RGB,
     //  GL_UNSIGNED_BYTE);
-    out_fbo_ptr_->CreateDepthBuffer();
+    //out_fbo_ptr_->CreateDepthBuffer();
+    out_fbo_ptr_->CreateDepthStencilBuffer();
     if (!out_fbo_ptr_->IsOk()) {
       assert(0);
       return false;
@@ -229,5 +230,10 @@ namespace hj
   void Manager::AddCylinder(float mouseX, float mouseY)
   {
     renderer_ptr_->AddCylinder(mouseX, mouseY);
+  }
+
+  bool Manager::CheckSelection(float mouseX, float mouseY)
+  {
+    return renderer_ptr_->CheckSelection(mouseX, mouseY);
   }
 }

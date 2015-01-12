@@ -94,6 +94,12 @@ namespace mesheditor.Mesh
         return;
       }
 
+      // selection
+      if(Globals.Manager.CheckSelection((float)point.X, (float)point.Y))
+      {
+        UpdateImage();
+      }
+
       oldMouse = point;
     }
 

@@ -23,6 +23,7 @@ namespace hj
     float height;
     glm::vec3 center_world;
     glm::mat4 model_matrix;
+    bool selected;
   };
 
   class MeshRenderer
@@ -182,6 +183,11 @@ namespace hj
     */
     void AddCylinder(float mouseX, float mouseY);
 
+    /**
+    * Check cylinder selection according to the mouse position.
+    */
+    bool CheckSelection(float mouseX, float mouseY);
+
 
     TriMesh* GetMesh() { return mesh_; }
 
@@ -255,6 +261,11 @@ namespace hj
     * @return: point in view coordinate.
     */
     Vec World2View(const Vec &point);
+
+    /**
+    * de select all cylinders.
+    */
+    void DeSelectAll();
 
   private:
     /** Output frame buffer. */

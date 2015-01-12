@@ -222,6 +222,11 @@ namespace hj
     */
     void AddCylinder(float mouseX, float mouseY);
 
+    /**
+    * Check cylinder selection according to the mouse position.
+    */
+    bool CheckSelection(float mouseX, float mouseY);
+
   private:
     /** Pointer to a VisualizationManager on the native heap. */
     Manager* mgr_ptr_;

@@ -104,6 +104,8 @@ namespace hj
 
     bool CreateDepthTexture(int format = GL_DEPTH_COMPONENT);
 
+    bool CreateDepthStencilBuffer(int format = GL_DEPTH24_STENCIL8);
+
   private:
     GLRendertarget* Attach(int attachment, GLRendertarget* target);
 

@@ -209,6 +209,21 @@ namespace hj
     return CreateColorTexture(GL_DEPTH_ATTACHMENT, format, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE);
   }
 
+  bool GLFramebuffer::CreateDepthStencilBuffer(int format /*= GL_DEPTH24_STENCIL8*/)
+  {
+    GLRendertarget* buffer = new GLRenderbuffer(width_, height_, format);
+    GLRendertarget* oldtarget = NULL;
+    oldtarget = Attach(GL_DEPTH_ATTACHMENT, buffer);
+    if (oldtarget) {
+      if (oldtarget->GetCount() == 0) delete oldtarget;
+    }
+    oldtarget = Attach(GL_STENCIL_ATTACHMENT, buffer);
+    if (oldtarget) {
+      if (oldtarget->GetCount() == 0) delete oldtarget;
+    }
+    return true;
+  }
+
   GLRendertarget* GLFramebuffer::Attach(int attachment, GLRendertarget* target)
   {
     if(!bound_) Bind();

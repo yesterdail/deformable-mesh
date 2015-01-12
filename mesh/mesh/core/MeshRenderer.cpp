@@ -39,6 +39,8 @@ namespace hj
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     DEL_PTR(pcaAnchor_);
     pcaAnchor_ = new PCA();
@@ -79,7 +81,8 @@ namespace hj
 
     glClearColor(0, 0, 0, 0);
     glClearDepth(1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearStencil(0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     float fmodelview[16], fprojection[16];
     glm::get(camera_.GetProjectionMatrix(), fprojection);
@@ -92,6 +95,13 @@ namespace hj
       glm::get(camera_.GetViewMatrix() * c.model_matrix, fmodelview);
       glMatrixMode(GL_MODELVIEW);
       glLoadMatrixf(fmodelview);
+
+      if (c.selected)
+        glColor3f(0.8f, 0, 0);
+      else
+        glColor3f(0.8f, 1.0f, 1.0f);
+
+      glStencilFunc(GL_ALWAYS, (GLint)(i + 1), (GLuint)-1);
 
       drawSolidCylinder(c.inner_radius, c.outer_radius, c.height, 20, 1);
     }
@@ -627,6 +637,8 @@ namespace hj
 
   void MeshRenderer::AddCylinder(float mouseX, float mouseY)
   {
+    DeSelectAll();
+
     // get cylinder center in world
     Vec center_view = Model2View(center_);
     Vec p_view(mouseX, mouseY, center_view[2]);
@@ -649,7 +661,38 @@ namespace hj
     cyl.height = 5 * unit;
     cyl.center_world = glm::vec3(p_world[0], p_world[1], p_world[2]);
     cyl.model_matrix = glm::translate(cyl.center_world);
+    cyl.selected = true;
 
     cylinders_.push_back(cyl);
+  }
+
+  void MeshRenderer::DeSelectAll()
+  {
+    for (size_t i = 0; i < cylinders_.size(); ++i)
+    {
+      cylinders_[i].selected = false;
+    }
+  }
+
+  bool MeshRenderer::CheckSelection(float mouseX, float mouseY)
+  {
+    DeSelectAll();
+
+    int width = out_fbo_ptr_->GetWidth();
+    int height = out_fbo_ptr_->GetHeight();
+    if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) 
+      return false;
+    
+    char index = 0;
+    out_fbo_ptr_->Bind();
+    glReadPixels(int(mouseX), int(mouseY), 1, 1, GL_STENCIL_INDEX, GL_BYTE, &index);
+    out_fbo_ptr_->Unbind();
+
+    if (index > 0 && index <= (char)cylinders_.size()) {
+      cylinders_[index - 1].selected = true;
+      return true;
+    }
+      
+    return false;
   }
 }

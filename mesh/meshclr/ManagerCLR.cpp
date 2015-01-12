@@ -211,4 +211,9 @@ namespace hj
   {
     return mgr_ptr_->AddCylinder(mouseX, mouseY);
   }
+
+  bool ManagerCLR::CheckSelection(float mouseX, float mouseY)
+  {
+    return mgr_ptr_->CheckSelection(mouseX, mouseY);
+  }
 }

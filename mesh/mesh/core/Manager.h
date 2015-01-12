@@ -218,6 +218,11 @@ namespace hj
     */
     HJ_EXPORT void AddCylinder(float mouseX, float mouseY);
 
+    /**
+    * Check cylinder selection according to the mouse position.
+    */
+    HJ_EXPORT bool CheckSelection(float mouseX, float mouseY);
+
   private:
     GLOffScreenRender* offscreen_render_ptr_;
 
