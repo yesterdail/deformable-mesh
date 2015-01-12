@@ -16,6 +16,15 @@ namespace hj
   class LaplacianSurface;
   class GraphicsRenderer;
 
+  struct Cylinder
+  {
+    float inner_radius;
+    float outer_radius;
+    float height;
+    glm::vec3 center_world;
+    glm::mat4 model_matrix;
+  };
+
   class MeshRenderer
   {
   public:
@@ -167,15 +176,11 @@ namespace hj
     void CutMesh();
 
     /**
-    * Set Segment line depth.
-    * @param d: depth.
+    * Add a default cylinder at the center of (mouseX, mouseY).
+    * @param mouseX: current mouse position X in view coordinate.
+    * @param mouseY: current mouse position Y in view coordinate.
     */
-    void SetLineDepth(float d);
-
-    /**
-    * Get Segment line depth.
-    */
-    float GetLineDepth() const { return depth_; }
+    void AddCylinder(float mouseX, float mouseY);
 
 
     TriMesh* GetMesh() { return mesh_; }
@@ -237,6 +242,20 @@ namespace hj
     */
     Vec Model2View(const Vec &point);
 
+    /**
+    * Transform point form view coordiante to world coordinate.
+    * @param point: point in view coordinate.
+    * @return: point in world coordinate.
+    */
+    Vec View2World(const Vec &point);
+
+    /**
+    * Transform point form world coordiante to view coordinate.
+    * @param point: point in world coordinate.
+    * @return: point in view coordinate.
+    */
+    Vec World2View(const Vec &point);
+
   private:
     /** Output frame buffer. */
     GLFramebuffer* out_fbo_ptr_;
@@ -297,13 +316,13 @@ namespace hj
     /** hold mesh file name for mesh restore. */
     std::string meshfile_;
 
-    /** line depth. */
-    float depth_;
-
     /** depth buffer. */
     float* depth_buffer_;
 
     GraphicsRenderer* gren_;
+
+    /** cylinder array. */
+    std::vector<Cylinder> cylinders_;
   };
 }
 #endif // HJ_MeshRenderer_h__

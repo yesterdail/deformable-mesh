@@ -172,16 +172,6 @@ namespace hj
     mgr_ptr_->CutMesh();
   }
 
-  void ManagerCLR::SetLineDepth(float d)
-  {
-    mgr_ptr_->SetLineDepth(d);
-  }
-
-  float ManagerCLR::GetLineDepth()
-  {
-    return mgr_ptr_->GetLineDepth();
-  }
-
   bool ManagerCLR::OnMouseDown_GraphicsOverlay(float x, float y)
   {
     return mgr_ptr_->OnMouseDown_GraphicsOverlay(x, y);
@@ -215,5 +205,10 @@ namespace hj
   void ManagerCLR::RemoveSelection()
   {
     return mgr_ptr_->RemoveSelection();
+  }
+
+  void ManagerCLR::AddCylinder(float mouseX, float mouseY)
+  {
+    return mgr_ptr_->AddCylinder(mouseX, mouseY);
   }
 }

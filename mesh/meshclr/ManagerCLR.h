@@ -175,17 +175,6 @@ namespace hj
     void CutMesh();
 
     /**
-    * Set Segment line depth.
-    * @param d: depth.
-    */
-    void SetLineDepth(float d);
-
-    /**
-    * Get Segment line depth.
-    */
-    float GetLineDepth();
-
-    /**
     * Create New graphics when mouse down.
     * @param x: mouse position X.
     * @param y: mouse position Y.
@@ -225,6 +214,13 @@ namespace hj
     * Remove selected graphic object.
     */
     void RemoveSelection();
+
+    /**
+    * Add a default cylinder at the center of (mouseX, mouseY).
+    * @param mouseX: current mouse position X in view coordinate.
+    * @param mouseY: current mouse position Y in view coordinate.
+    */
+    void AddCylinder(float mouseX, float mouseY);
 
   private:
     /** Pointer to a VisualizationManager on the native heap. */

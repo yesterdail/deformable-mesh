@@ -74,17 +74,16 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-                    <ToggleButton x:Name="btnAddCylinder" FontSize="14" Tag="AddCylinder" Style="{DynamicResource StandardToggleButton}" ToolTip="Add Cylinder"
-                                  IsChecked="{Binding ElementName=_this, Path=Type, Mode=OneWay, Converter={StaticResource convToolType}, ConverterParameter=AddCylinder}">
+                    <Button x:Name="btnAddCylinder" FontSize="14" Tag="AddCylinder" Style="{DynamicResource TransparentButton}" ToolTip="Add Cylinder" AllowDrop="True">
                         <Image Source="Images/cylinder.png" Width="40" Height="40"/>
-                    </ToggleButton>
+                    </Button>
                 </StackPanel>
             </StackPanel>
         </DockPanel>
 
         <Border x:Name="border" Grid.Column="1" BorderBrush="{x:Null}" BorderThickness="1" Background="Black" Margin="2">
             <Grid x:Name="grid">
-                <Image x:Name="image"/>
+                <Image x:Name="image" AllowDrop="True"/>
                 <!--<Slider x:Name="slider" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,30" Orientation="Horizontal" Width="250" />-->
             </Grid>
         </Border>

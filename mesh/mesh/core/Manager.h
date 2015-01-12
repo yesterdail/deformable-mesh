@@ -171,17 +171,6 @@ namespace hj
     HJ_EXPORT void CutMesh();
 
     /**
-    * Set Segment line depth.
-    * @param d: depth.
-    */
-    HJ_EXPORT void SetLineDepth(float d);
-
-    /**
-    * Get Segment line depth.
-    */
-    HJ_EXPORT float GetLineDepth();
-
-    /**
     * Create New graphics when mouse down.
     * @param x: mouse position X.
     * @param y: mouse position Y.
@@ -221,6 +210,13 @@ namespace hj
     * Remove selected graphic object.
     */
     HJ_EXPORT void RemoveSelection();
+
+    /**
+    * Add a default cylinder at the center of (mouseX, mouseY).
+    * @param mouseX: current mouse position X in view coordinate.
+    * @param mouseY: current mouse position Y in view coordinate.
+    */
+    HJ_EXPORT void AddCylinder(float mouseX, float mouseY);
 
   private:
     GLOffScreenRender* offscreen_render_ptr_;

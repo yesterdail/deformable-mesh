@@ -154,6 +154,25 @@ namespace mesheditor.Mesh
       Type = ToolType.Pointer;
     }
 
+    private void btnAddCylinder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+      DataObject dataObject = new DataObject(0);
+      DragDrop.DoDragDrop((DependencyObject)e.Source, dataObject, DragDropEffects.Copy);
+    }
+
+    private void image_Drop(object sender, DragEventArgs e)
+    {
+      Point p = e.GetPosition(image);
+      Globals.Manager.AddCylinder((float)p.X, (float)p.Y);
+      UpdateImage();
+    }
+
+    private void btnAddCylinder_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+    {
+      Mouse.SetCursor(CursorHelper.CreateCursor(btnAddCylinder, 5, 5));
+      e.Handled = true;
+    }
+
     #endregion
 
     #region Other Event Handlers
@@ -327,6 +346,10 @@ namespace mesheditor.Mesh
       grid.MouseUp += new MouseButtonEventHandler(grid_MouseUp);
 
       //slider.ValueChanged += new RoutedPropertyChangedEventHandler<double>(Slider_ValueChanged);
+
+      btnAddCylinder.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(btnAddCylinder_PreviewMouseLeftButtonDown);
+      btnAddCylinder.GiveFeedback += new GiveFeedbackEventHandler(btnAddCylinder_GiveFeedback);
+      image.Drop += new DragEventHandler(image_Drop);
     }
 
     /// <summary>

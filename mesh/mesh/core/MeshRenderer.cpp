@@ -29,7 +29,6 @@ namespace hj
     , texture_(false)
     , isPreComputed_(false)
     , meshfile_("")
-    , depth_(0.9f)
     , gren_(NULL)
   {
     glDisable(GL_DITHER);
@@ -83,15 +82,23 @@ namespace hj
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     float fmodelview[16], fprojection[16];
-    glm::get(camera_.GetViewMatrix() * model_, fmodelview);
     glm::get(camera_.GetProjectionMatrix(), fprojection);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixf(fmodelview);
     glMatrixMode(GL_PROJECTION);
     glLoadMatrixf(fprojection);
 
-    drawSolidCylinder(0.2, 0.25, 0.5, 20, 1);
+    for (size_t i = 0; i < cylinders_.size(); ++i)
+    {
+      Cylinder &c = cylinders_[i];
+      glm::get(camera_.GetViewMatrix() * c.model_matrix, fmodelview);
+      glMatrixMode(GL_MODELVIEW);
+      glLoadMatrixf(fmodelview);
+
+      drawSolidCylinder(c.inner_radius, c.outer_radius, c.height, 20, 1);
+    }
+
+    glm::get(camera_.GetViewMatrix() * model_, fmodelview);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(fmodelview);
 
     // TODO: 
     if (mesh_)
@@ -504,6 +511,33 @@ namespace hj
     return Vec((float)x, (float)y, (float)z);
   }
 
+  Vec MeshRenderer::View2World(const Vec &p)
+  {
+    double dmodelview[16], dprojection[16];
+    glm::get(camera_.GetViewMatrix(), dmodelview);
+    glm::get(camera_.GetProjectionMatrix(), dprojection);
+    GLint viewport[4] = { 0, 0, out_fbo_ptr_->GetWidth(), out_fbo_ptr_->GetHeight() };
+
+    double x, y, z;
+    gluUnProject(p[0], p[1], p[2], dmodelview, dprojection, viewport, &x, &y, &z);
+
+    return Vec((float)x, (float)y, (float)z);
+  }
+
+  Vec MeshRenderer::World2View(const Vec &p)
+  {
+    double dmodelview[16], dprojection[16];
+    glm::get(camera_.GetViewMatrix(), dmodelview);
+    glm::get(camera_.GetProjectionMatrix(), dprojection);
+    GLint viewport[4] = { 0, 0, out_fbo_ptr_->GetWidth(), out_fbo_ptr_->GetHeight() };
+    glGetIntegerv(GL_VIEWPORT, viewport);
+
+    double x, y, z;
+    gluProject(p[0], p[1], p[2], dmodelview, dprojection, viewport, &x, &y, &z);
+
+    return Vec((float)x, (float)y, (float)z);
+  }
+
   void MeshRenderer::CancelDeform()
   {
     anchorPts_.clear();
@@ -591,13 +625,31 @@ namespace hj
     gren_->RemoveAll();
   }
 
-  void MeshRenderer::SetLineDepth(float d)
+  void MeshRenderer::AddCylinder(float mouseX, float mouseY)
   {
-    if (std::abs(depth_ - d) < kEpsilonFloat) return;
+    // get cylinder center in world
+    Vec center_view = Model2View(center_);
+    Vec p_view(mouseX, mouseY, center_view[2]);
+    Vec p_world = View2World(p_view);
 
-    if (d < 0) d = 0;
-    if (d > 1) d = 1;
-    depth_ = d;
-    CutMesh();
+    // get scale from world to view
+    Vec p1(0, 0, 0), p2(1, 0, 0), v;
+    p1 = World2View(p1);
+    p2 = World2View(p2);
+    v = p1 - p2;
+    float scale = std::sqrt(v[0] * v[0] + v[1] * v[1]);
+
+    // get default cylinder radius and height.
+    int height = out_fbo_ptr_->GetHeight();
+    float unit = height / scale / 100.0f;
+
+    Cylinder cyl;
+    cyl.inner_radius = 2 * unit;
+    cyl.outer_radius = 2.5f * unit;
+    cyl.height = 5 * unit;
+    cyl.center_world = glm::vec3(p_world[0], p_world[1], p_world[2]);
+    cyl.model_matrix = glm::translate(cyl.center_world);
+
+    cylinders_.push_back(cyl);
   }
 }

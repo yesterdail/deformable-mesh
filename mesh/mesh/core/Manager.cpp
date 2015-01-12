@@ -190,16 +190,6 @@ namespace hj
     renderer_ptr_->CutMesh();
   }
 
-  void Manager::SetLineDepth(float d)
-  {
-    renderer_ptr_->SetLineDepth(d);
-  }
-
-  float  Manager::GetLineDepth()
-  {
-    return renderer_ptr_->GetLineDepth();
-  }
-
   bool Manager::OnMouseDown_GraphicsOverlay(float x, float y)
   {
     return graphics_renderer_ptr_->OnMouseDown(glm::vec2(x, y));
@@ -234,5 +224,10 @@ namespace hj
   void Manager::RemoveSelection()
   {
     graphics_renderer_ptr_->RemoveSelection();
+  }
+
+  void Manager::AddCylinder(float mouseX, float mouseY)
+  {
+    renderer_ptr_->AddCylinder(mouseX, mouseY);
   }
 }
