@@ -248,28 +248,24 @@ namespace hj
     int w = out_fbo_ptr_->GetWidth();
     int h = out_fbo_ptr_->GetHeight();
 
-    Cylinder* cyl = NULL;
-    for (size_t i = 0; i < cylinders_.size(); ++i) {
-      if (cylinders_[i].selected) {
-        cyl = &cylinders_[i];
-        
-        glm::mat4 view = camera_.GetViewMatrix();
-        glm::mat4 view_rotation = glm::mat4(0);
-        view_rotation[0][0] = view[0][0]; view_rotation[0][1] = view[0][1]; view_rotation[0][2] = view[0][2];
-        view_rotation[1][0] = view[1][0]; view_rotation[1][1] = view[1][1]; view_rotation[1][2] = view[1][2];
-        view_rotation[2][0] = view[2][0]; view_rotation[2][1] = view[2][1]; view_rotation[2][2] = view[2][2];
-        view_rotation[3][3] = 1;
+    Cylinder* cyl = GetSelection();
+    if (cyl) {
+      glm::mat4 view = camera_.GetViewMatrix();
+      glm::mat4 view_rotation = glm::mat4(0);
+      view_rotation[0][0] = view[0][0]; view_rotation[0][1] = view[0][1]; view_rotation[0][2] = view[0][2];
+      view_rotation[1][0] = view[1][0]; view_rotation[1][1] = view[1][1]; view_rotation[1][2] = view[1][2];
+      view_rotation[2][0] = view[2][0]; view_rotation[2][1] = view[2][1]; view_rotation[2][2] = view[2][2];
+      view_rotation[3][3] = 1;
 
-        glm::mat4 rotate_matrix = TrackBall2::RotateMatrix(
-          glm::vec2(lastMouseX, lastMouseY),
-          glm::vec2(newMouseX, newMouseY),
-          glm::ivec2(w, h),
-          glm::inverse(view_rotation));
+      glm::mat4 rotate_matrix = TrackBall2::RotateMatrix(
+        glm::vec2(lastMouseX, lastMouseY),
+        glm::vec2(newMouseX, newMouseY),
+        glm::ivec2(w, h),
+        glm::inverse(view_rotation));
 
-        cyl->rotate = rotate_matrix * cyl->rotate;
-        cyl->model_matrix = glm::translate(cyl->center_world) * cyl->rotate;
-        return;
-      }
+      cyl->rotate = rotate_matrix * cyl->rotate;
+      cyl->model_matrix = glm::translate(cyl->center_world) * cyl->rotate;
+      return;
     }
 
     trackball_.Rotate(glm::vec2(newMouseX, newMouseY),
@@ -297,23 +293,19 @@ namespace hj
     int w = out_fbo_ptr_->GetWidth();
     int h = out_fbo_ptr_->GetHeight();
 
-    Cylinder* cyl = NULL;
-    for (size_t i = 0; i < cylinders_.size(); ++i) {
-      if (cylinders_[i].selected) {
-        cyl = &cylinders_[i];
-        
-        glm::vec3 center(0); // view
-        center = glm::transformPoint(cyl->model_matrix, center); // world
-        Vec c_view = World2View(Vec(center.x, center.y, center.z)); // view
+    Cylinder* cyl = GetSelection();
+    if (cyl) {
+      glm::vec3 center(0); // view
+      center = glm::transformPoint(cyl->model_matrix, center); // world
+      Vec c_view = World2View(Vec(center.x, center.y, center.z)); // view
 
-        Vec p1_world = View2World(Vec(newMouseX, newMouseY, c_view[2]));
-        Vec p2_world = View2World(Vec(lastMouseX, lastMouseY, c_view[2]));
-        Vec motion = p1_world - p2_world;
-        cyl->center_world += glm::vec3(motion[0], motion[1], motion[2]);
-        cyl->model_matrix = glm::translate(cyl->center_world) * cyl->rotate;
-        
-        return;
-      }
+      Vec p1_world = View2World(Vec(newMouseX, newMouseY, c_view[2]));
+      Vec p2_world = View2World(Vec(lastMouseX, lastMouseY, c_view[2]));
+      Vec motion = p1_world - p2_world;
+      cyl->center_world += glm::vec3(motion[0], motion[1], motion[2]);
+      cyl->model_matrix = glm::translate(cyl->center_world) * cyl->rotate;
+
+      return;
     }
 
     trackball_.Move(glm::vec2(newMouseX, newMouseY),
@@ -742,5 +734,53 @@ namespace hj
     }
       
     return false;
+  }
+
+  Cylinder* MeshRenderer::GetSelection()
+  {
+    for (size_t i = 0; i < cylinders_.size(); ++i) {
+      if (cylinders_[i].selected) {
+        return &cylinders_[i];
+      }
+    }
+    return NULL;
+  }
+
+  bool MeshRenderer::GetSelectionProperty(float properties[3])
+  {
+    Cylinder* cyl = GetSelection();
+    if (cyl) {
+      properties[0] = cyl->inner_radius;
+      properties[1] = cyl->outer_radius;
+      properties[2] = cyl->height;
+      return true;
+    }
+    return false;
+  }
+
+  void MeshRenderer::SetInnerRadius(float r)
+  {
+    Cylinder* cyl = GetSelection();
+    if (cyl) {
+      if (r < cyl->outer_radius)
+        cyl->inner_radius = r;
+    }
+  }
+
+  void MeshRenderer::SetOuterRadius(float r)
+  {
+    Cylinder* cyl = GetSelection();
+    if (cyl) {
+      if (r > cyl->inner_radius)
+        cyl->outer_radius = r;
+    }
+  }
+
+  void MeshRenderer::SetHeight(float h)
+  {
+    Cylinder* cyl = GetSelection();
+    if (cyl) {
+      cyl->height = h;
+    }
   }
 }

@@ -223,6 +223,27 @@ namespace hj
     */
     HJ_EXPORT bool CheckSelection(float mouseX, float mouseY);
 
+    /**
+    * Get Selected cylinder properties, store as inner radius, outer radius, and height.
+    * @return: true if any cylinder is selected.
+    */
+    HJ_EXPORT bool GetSelectionProperty(float properties[3]);
+
+    /**
+    * Set inner radius of current selected cylinder.
+    */
+    HJ_EXPORT void SetInnerRadius(float r);
+
+    /**
+    * Set outer radius of current selected cylinder.
+    */
+    HJ_EXPORT void SetOuterRadius(float r);
+
+    /**
+    * Set height of current selected cylinder.
+    */
+    HJ_EXPORT void SetHeight(float h);
+
   private:
     GLOffScreenRender* offscreen_render_ptr_;
 

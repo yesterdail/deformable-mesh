@@ -227,6 +227,27 @@ namespace hj
     */
     bool CheckSelection(float mouseX, float mouseY);
 
+    /**
+    * Get Selected cylinder properties, store as inner radius, outer radius, and height.
+    * @return: true if any cylinder is selected.
+    */
+    bool GetSelectionProperty(array<float>^ properties);
+
+    /**
+    * Set inner radius of current selected cylinder.
+    */
+    void SetInnerRadius(float r);
+
+    /**
+    * Set outer radius of current selected cylinder.
+    */
+    void SetOuterRadius(float r);
+
+    /**
+    * Set height of current selected cylinder.
+    */
+    void SetHeight(float h);
+
   private:
     /** Pointer to a VisualizationManager on the native heap. */
     Manager* mgr_ptr_;

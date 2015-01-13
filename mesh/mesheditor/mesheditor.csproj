@@ -70,12 +70,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Mesh\CylinderProperty.xaml.cs">
+      <DependentUpon>CylinderProperty.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Mesh\Definitions.cs" />
     <Compile Include="Mesh\Helpers\ByteImageConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Mesh\CylinderProperty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Mesh\MeshPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -85,6 +85,7 @@
             <Grid x:Name="grid">
                 <Image x:Name="image" AllowDrop="True"/>
                 <!--<Slider x:Name="slider" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,30" Orientation="Horizontal" Width="250" />-->
+                <mesh:CylinderProperty x:Name="cyProp" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed"/>
             </Grid>
         </Border>
     </Grid>

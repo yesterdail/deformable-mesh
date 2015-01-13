@@ -216,4 +216,25 @@ namespace hj
   {
     return mgr_ptr_->CheckSelection(mouseX, mouseY);
   }
+
+  bool ManagerCLR::GetSelectionProperty(array<float>^ properties)
+  {
+    pin_ptr<float> pinned_prop = &properties[0];
+    return mgr_ptr_->GetSelectionProperty(pinned_prop);
+  }
+
+  void ManagerCLR::SetInnerRadius(float r)
+  {
+    return mgr_ptr_->SetInnerRadius(r);
+  }
+
+  void ManagerCLR::SetOuterRadius(float r)
+  {
+    return mgr_ptr_->SetOuterRadius(r);
+  }
+
+  void ManagerCLR::SetHeight(float h)
+  {
+    return mgr_ptr_->SetHeight(h);
+  }
 }

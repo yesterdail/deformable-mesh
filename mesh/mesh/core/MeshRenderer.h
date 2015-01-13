@@ -189,7 +189,27 @@ namespace hj
     */
     bool CheckSelection(float mouseX, float mouseY);
 
+    /**
+    * Get Selected cylinder properties, store as inner radius, outer radius, and height.
+    * @return: true if any cylinder is selected.
+    */
+    bool GetSelectionProperty(float properties[3]);
 
+    /**
+    * Set inner radius of current selected cylinder.
+    */
+    void SetInnerRadius(float r);
+
+    /**
+    * Set outer radius of current selected cylinder.
+    */
+    void SetOuterRadius(float r);
+
+    /**
+    * Set height of current selected cylinder.
+    */
+    void SetHeight(float h);
+    
     TriMesh* GetMesh() { return mesh_; }
 
     std::vector<TriMesh::VHandle>& GetControlPts() { return controlPts_; }
@@ -267,6 +287,12 @@ namespace hj
     * de select all cylinders.
     */
     void DeSelectAll();
+
+    /**
+    * Get Selected cylinder.
+    * @return: if find, return selected cylinder. else return NULL
+    */
+    Cylinder* GetSelection();
 
   private:
     /** Output frame buffer. */

@@ -236,4 +236,24 @@ namespace hj
   {
     return renderer_ptr_->CheckSelection(mouseX, mouseY);
   }
+
+  bool Manager::GetSelectionProperty(float properties[3])
+  {
+    return renderer_ptr_->GetSelectionProperty(properties);
+  }
+
+  void Manager::SetInnerRadius(float r)
+  {
+    return renderer_ptr_->SetInnerRadius(r);
+  }
+
+  void Manager::SetOuterRadius(float r)
+  {
+    return renderer_ptr_->SetOuterRadius(r);
+  }
+
+  void Manager::SetHeight(float h)
+  {
+    return renderer_ptr_->SetHeight(h);
+  }
 }

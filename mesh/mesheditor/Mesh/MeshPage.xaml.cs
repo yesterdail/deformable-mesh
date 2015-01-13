@@ -77,6 +77,7 @@ namespace mesheditor.Mesh
       mouseDown = true;
 
       Point point = e.GetPosition(image);
+      oldMouse = point;
 
       // tool operation.
       if (e.ChangedButton == MouseButton.Left)
@@ -87,11 +88,31 @@ namespace mesheditor.Mesh
           return;
         }
       }
+
       
       if (Globals.Manager.PostSelection((float)point.X, (float)point.Y))
       {
         onDeformation = true;
         return;
+      }
+
+      // cylinder property
+      if (e.ChangedButton == MouseButton.Right)
+      {
+        if(Globals.Manager.CheckSelection((float)point.X, (float)point.Y))
+        {
+          UpdateImage();
+          float[] prop = new float[3];
+          if (Globals.Manager.GetSelectionProperty(prop))
+          {
+            cyProp.Margin = new Thickness(point.X, point.Y, 0, 0);
+            cyProp.tbInner.Text = prop[0].ToString();
+            cyProp.tbOuter.Text = prop[1].ToString();
+            cyProp.tbHeight.Text = prop[2].ToString();
+            cyProp.Visibility = Visibility.Visible;
+            return;
+          }
+        }
       }
 
       // selection
@@ -100,7 +121,7 @@ namespace mesheditor.Mesh
         UpdateImage();
       }
 
-      oldMouse = point;
+      cyProp.Visibility = Visibility.Collapsed;
     }
 
     private void grid_MouseMove(object sender, MouseEventArgs e)
